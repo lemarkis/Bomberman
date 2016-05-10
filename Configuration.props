@@ -4,8 +4,6 @@
   <PropertyGroup Label="UserMacros">
     <OGRE_HOME_Win32>C:\SDKs\Win32\OGRE_HOME</OGRE_HOME_Win32>
     <OGRE_HOME_x64>C:\SDKs\x64\OGRE_HOME</OGRE_HOME_x64>
-    <BOOST_HOME_Win32>C:\SDKs\Win32\BOOST_HOME</BOOST_HOME_Win32>
-    <BOOST_HOME_x64>C:\SDKs\x64\BOOST_HOME</BOOST_HOME_x64>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup>
@@ -17,14 +15,6 @@
     </BuildMacro>
     <BuildMacro Include="OGRE_HOME_x64">
       <Value>$(OGRE_HOME_x64)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="BOOST_HOME_Win32">
-      <Value>$(BOOST_HOME_Win32)</Value>
-      <EnvironmentVariable>true</EnvironmentVariable>
-    </BuildMacro>
-    <BuildMacro Include="BOOST_HOME_x64">
-      <Value>$(BOOST_HOME_x64)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>
