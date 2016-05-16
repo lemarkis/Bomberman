@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="BaseApplication.h" />
+    <ClInclude Include="BombermanApplication.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BaseApplication.cpp" />
+    <ClCompile Include="BombermanApplication.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Bomberman.rc" />
+    <Image Include="Bomberman.ico" />
+  </ItemGroup>
+</Project>
