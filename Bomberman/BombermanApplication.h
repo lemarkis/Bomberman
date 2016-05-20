@@ -3,33 +3,59 @@
 Filename:    BombermanApplication.h
 -----------------------------------------------------------------------------
 
-This source file is part of the
-   ___                 __    __ _ _    _
-  /___\__ _ _ __ ___  / / /\ \ (_) | _(_)
- //  // _` | '__/ _ \ \ \/  \/ / | |/ / |
-/ \_// (_| | | |  __/  \  /\  /| |   <| |
-\___/ \__, |_|  \___|   \/  \/ |_|_|\_\_|
-	  |___/
-Tutorial Framework (for Ogre 1.9)
-http://www.ogre3d.org/wiki/
+blablabl comment;
+
 -----------------------------------------------------------------------------
 */
 
 #ifndef __BombermanApplication_h_
 #define __BombermanApplication_h_
 
-#include "BaseApplication.h"
+//#include "BaseApplication.h"
+
+#include <OgreRoot.h>
+#include <OgreConfigFile.h>
+#include <OgreRenderWindow.h>
+#include <OgreSceneManager.h>
+#include <OgreCamera.h>
+#include <OgreViewport.h>
+#include <OgreEntity.h>
+#include <OgreWindowEventUtilities.h>
+
+#include <OISEvents.h>
+#include <OISInputManager.h>
+#include <OISKeyboard.h>
+#include <OISMouse.h>
+//#include <OISJoyStick.h>
 
 //---------------------------------------------------------------------------
 
-class BombermanApplication : public BaseApplication
+class BombermanApplication : public Ogre::WindowEventListener, public Ogre::FrameListener
 {
 public:
 	BombermanApplication(void);
 	virtual ~BombermanApplication(void);
 
+	bool go();
+	void createScene();
+
 protected:
-	virtual void createScene(void);
+	Ogre::Root* mRoot;
+	Ogre::String mResourcesCfg;
+	Ogre::String mPluginsCfg;
+	Ogre::RenderWindow* mWindow;
+	Ogre::SceneManager* mSceneMgr;
+	Ogre::Camera* mCamera;
+
+	OIS::InputManager* mInputManager;
+	OIS::Mouse* mMouse;
+	OIS::Keyboard* mKeyboard;
+	//OIS::JoyStick* mJoystick;
+
+	virtual void windowResized(Ogre::RenderWindow* rw);
+	virtual void windowClosed(Ogre::RenderWindow* rw);
+
+	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 };
 
 //---------------------------------------------------------------------------

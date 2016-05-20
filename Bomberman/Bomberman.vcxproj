@@ -317,16 +317,17 @@ echo Zip=$(OGRE_HOME)\Media\packs\SdkTrays.zip&gt;&gt;%resourcescfg%
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BaseApplication.h" />
     <ClInclude Include="BombermanApplication.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BaseApplication.cpp" />
     <ClCompile Include="BombermanApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Bomberman.rc" />
     <Image Include="Bomberman.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\bin\x86-Debug\my_resources_d.cfg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
