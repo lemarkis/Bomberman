@@ -73,7 +73,9 @@ bool BombermanApplication::go()
 #pragma endregion
 
 #pragma region Creating sceneManager
-	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
+	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "LoadedScene");
+	mPrimarySceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "SplashScreen");
+	mSecondarySceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "Introduction");
 #pragma endregion
 
 #pragma region Creating camera
@@ -96,6 +98,7 @@ bool BombermanApplication::go()
 
 #pragma region Creating scene
 	createScene();
+	createSplashScreen();
 #pragma endregion
 
 #pragma region Initialising OIS
@@ -174,6 +177,7 @@ bool BombermanApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 void BombermanApplication::createScene()
 {
+#pragma region Intro
 	Ogre::Entity* ogreEntity = mSceneMgr->createEntity("Legoblock.mesh");
 
 	Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
@@ -183,6 +187,56 @@ void BombermanApplication::createScene()
 
 	Ogre::Light* light = mSceneMgr->createLight("MainLight");
 	light->setPosition(20, 80, 50);
+#pragma endregion
+
+#pragma region SplashScreen
+	// creation image splash screen
+	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().create("SplashScreen", "General");
+	material->getTechnique(0)->getPass(0)->createTextureUnitState("splash_screen.dds");
+	material->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
+	material->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
+	material->getTechnique(0)->getPass(0)->setLightingEnabled(false);
+	//creation rect
+	Ogre::Rectangle2D *rect = new Ogre::Rectangle2D(true);
+	rect->setCorners(-1.0, 1.0, 1.0, -1.0);
+	rect->setMaterial("SplashScreen");
+	// priorité chargement
+	rect->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_BACKGROUND);
+	// stay visible
+	Ogre::AxisAlignedBox aabInf;
+	aabInf.setInfinite();
+	rect->setBoundingBox(aabInf);
+	//
+	Ogre::SceneNode* node = mPrimarySceneMgr->getRootSceneNode()->createChildSceneNode("SplashScreen");
+	node->attachObject(rect);
+	mPrimarySceneMgr->setAmbientLight(Ogre::ColourValue(1, 1, 1));
+#pragma endregion SplashScreen
+}
+
+void BombermanApplication::createSplashScreen()
+{
+#pragma region SplashScreen
+	// creation image splash screen
+	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().create("SplashScreen", "General");
+	material->getTechnique(0)->getPass(0)->createTextureUnitState("splash_screen.dds");
+	material->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
+	material->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
+	material->getTechnique(0)->getPass(0)->setLightingEnabled(false);
+	//creation rect
+	rect = new Ogre::Rectangle2D(true);
+	rect->setCorners(-1.0, 1.0, 1.0, -1.0);
+	rect->setMaterial("SplashScreen");
+	// priorité chargement
+	rect->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_BACKGROUND);
+	// stay visible
+	Ogre::AxisAlignedBox aabInf;
+	aabInf.setInfinite();
+	rect->setBoundingBox(aabInf);
+	//
+	Ogre::SceneNode* node = mPrimarySceneMgr->getRootSceneNode()->createChildSceneNode("SplashScreen");
+	node->attachObject(rect);
+	mPrimarySceneMgr->setAmbientLight(Ogre::ColourValue(1, 1, 1));
+#pragma endregion SplashScreen
 }
 
 

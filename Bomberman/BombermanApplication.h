@@ -45,7 +45,10 @@ protected:
 	Ogre::String mPluginsCfg;
 	Ogre::RenderWindow* mWindow;
 	Ogre::SceneManager* mSceneMgr;
+	Ogre::SceneManager* mPrimarySceneMgr;
+	Ogre::SceneManager* mSecondarySceneMgr;
 	Ogre::Camera* mCamera;
+	Ogre::Rectangle2D *rect;
 
 	OIS::InputManager* mInputManager;
 	OIS::Mouse* mMouse;
@@ -55,7 +58,11 @@ protected:
 	virtual void windowResized(Ogre::RenderWindow* rw);
 	virtual void windowClosed(Ogre::RenderWindow* rw);
 
+
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+private:
+	void createSplashScreen();
 };
 
 //---------------------------------------------------------------------------
