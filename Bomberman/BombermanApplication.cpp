@@ -10,7 +10,6 @@ blablabla comment;
 
 #include "BombermanApplication.h"
 
-
 BombermanApplication::BombermanApplication(void)
 	: mRoot(0),
 	mResourcesCfg(Ogre::StringUtil::BLANK),
@@ -72,18 +71,12 @@ bool BombermanApplication::go()
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 #pragma endregion
 
-#pragma region Creating sceneManager
-	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "LoadedScene");
-	mPrimarySceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "SplashScreen");
-	mSecondarySceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "Introduction");
-#pragma endregion
-
-#pragma region Creating camera
-	mCamera = mSceneMgr->createCamera("MainCam");
-
-	mCamera->setPosition(0, 0, 80);
-	mCamera->lookAt(0, 0, -300);
-	mCamera->setNearClipDistance(5);
+#pragma region SplashScreen while loading
+	mSplashSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "SplashScreen");
+	mSplashSceneMgr->createCamera(CAMERA_NAME);
+	createSplashScreen();
+	mSceneMgr = mSplashSceneMgr;
+	mCamera = mSceneMgr->getCamera(CAMERA_NAME);
 #pragma endregion
 
 #pragma region Creating viewPort
@@ -96,10 +89,20 @@ bool BombermanApplication::go()
 		Ogre::Real(vp->getActualHeight()));
 #pragma endregion
 
-#pragma region Creating scene
-	createScene();
-	createSplashScreen();
+#pragma region Creating sceneManager
+	mIntroSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC, "Introduction");
 #pragma endregion
+
+#pragma region Creating camera
+	mIntroSceneMgr->createCamera(CAMERA_NAME);
+#pragma endregion
+
+#pragma region Creating scene
+	createIntroScene();
+#pragma endregion
+
+	loadScene(mIntroSceneMgr);
+	setupViewport(mSceneMgr);
 
 #pragma region Initialising OIS
 	Ogre::LogManager::getSingletonPtr()->logMessage("*** Initializing OIS ***");
@@ -113,9 +116,12 @@ bool BombermanApplication::go()
 
 	mInputManager = OIS::InputManager::createInputSystem(pl);
 
-	mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject(OIS::OISKeyboard, false));
-	mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject(OIS::OISMouse, false));
+	mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject(OIS::OISKeyboard, true));
+	mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject(OIS::OISMouse, true));
 	//mJoystick = static_cast<OIS::JoyStick*>(mInputManager->createInputObject(OIS::OISJoyStick, false));
+
+	mMouse->setEventCallback(this);
+	mKeyboard->setEventCallback(this);
 #pragma endregion
 
 	//----- Set initial mouse clipping size
@@ -128,6 +134,47 @@ bool BombermanApplication::go()
 
 	mRoot->startRendering();
 
+	return true;
+}
+
+void BombermanApplication::loadScene(Ogre::SceneManager * loadScene)
+{
+	mSceneMgr = loadScene;
+}
+
+bool BombermanApplication::keyPressed(const OIS::KeyEvent & arg)
+{
+	if (arg.key == OIS::KC_V)
+	{
+		loadScene(mSplashSceneMgr);
+		setupViewport(mSceneMgr);
+	}
+	if (arg.key == OIS::KC_B)
+	{
+		loadScene(mIntroSceneMgr);
+		setupViewport(mSceneMgr);
+	}
+
+	return true;
+}
+
+bool BombermanApplication::keyReleased(const OIS::KeyEvent & arg)
+{
+	return true;
+}
+
+bool BombermanApplication::mouseMoved(const OIS::MouseEvent & arg)
+{
+	return true;
+}
+
+bool BombermanApplication::mousePressed(const OIS::MouseEvent & arg, OIS::MouseButtonID id)
+{
+	return true;
+}
+
+bool BombermanApplication::mouseReleased(const OIS::MouseEvent & arg, OIS::MouseButtonID id)
+{
 	return true;
 }
 
@@ -175,47 +222,26 @@ bool BombermanApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	return true;
 }
 
-void BombermanApplication::createScene()
+void BombermanApplication::createIntroScene()
 {
-#pragma region Intro
-	Ogre::Entity* ogreEntity = mSceneMgr->createEntity("Legoblock.mesh");
+	mCamera = mIntroSceneMgr->getCamera(CAMERA_NAME);
+	mCamera->setPosition(0, 0, 80);
+	mCamera->lookAt(0, 0, -300);
+	mCamera->setNearClipDistance(5);
 
-	Ogre::SceneNode* ogreNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	Ogre::Entity* ogreEntity = mIntroSceneMgr->createEntity("Legoblock.mesh");
+
+	Ogre::SceneNode* ogreNode = mIntroSceneMgr->getRootSceneNode()->createChildSceneNode();
 	ogreNode->attachObject(ogreEntity);
 
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(.5, .5, .5));
+	mIntroSceneMgr->setAmbientLight(Ogre::ColourValue(.5, .5, .5));
 
-	Ogre::Light* light = mSceneMgr->createLight("MainLight");
+	Ogre::Light* light = mIntroSceneMgr->createLight("MainLight");
 	light->setPosition(20, 80, 50);
-#pragma endregion
-
-#pragma region SplashScreen
-	// creation image splash screen
-	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().create("SplashScreen", "General");
-	material->getTechnique(0)->getPass(0)->createTextureUnitState("splash_screen.dds");
-	material->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
-	material->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
-	material->getTechnique(0)->getPass(0)->setLightingEnabled(false);
-	//creation rect
-	Ogre::Rectangle2D *rect = new Ogre::Rectangle2D(true);
-	rect->setCorners(-1.0, 1.0, 1.0, -1.0);
-	rect->setMaterial("SplashScreen");
-	// priorité chargement
-	rect->setRenderQueueGroup(Ogre::RenderQueueGroupID::RENDER_QUEUE_BACKGROUND);
-	// stay visible
-	Ogre::AxisAlignedBox aabInf;
-	aabInf.setInfinite();
-	rect->setBoundingBox(aabInf);
-	//
-	Ogre::SceneNode* node = mPrimarySceneMgr->getRootSceneNode()->createChildSceneNode("SplashScreen");
-	node->attachObject(rect);
-	mPrimarySceneMgr->setAmbientLight(Ogre::ColourValue(1, 1, 1));
-#pragma endregion SplashScreen
 }
 
 void BombermanApplication::createSplashScreen()
 {
-#pragma region SplashScreen
 	// creation image splash screen
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().create("SplashScreen", "General");
 	material->getTechnique(0)->getPass(0)->createTextureUnitState("splash_screen.dds");
@@ -233,12 +259,21 @@ void BombermanApplication::createSplashScreen()
 	aabInf.setInfinite();
 	rect->setBoundingBox(aabInf);
 	//
-	Ogre::SceneNode* node = mPrimarySceneMgr->getRootSceneNode()->createChildSceneNode("SplashScreen");
+	Ogre::SceneNode* node = mSplashSceneMgr->getRootSceneNode()->createChildSceneNode("SplashScreen");
 	node->attachObject(rect);
-	mPrimarySceneMgr->setAmbientLight(Ogre::ColourValue(1, 1, 1));
-#pragma endregion SplashScreen
+	mSplashSceneMgr->setAmbientLight(Ogre::ColourValue(1, 1, 1));
 }
 
+void BombermanApplication::setupViewport(Ogre::SceneManager * curr)
+{
+	mWindow->removeAllViewports();
+
+	Ogre::Camera *cam = curr->getCamera(CAMERA_NAME);
+	Ogre::Viewport* vp = mWindow->addViewport(cam);
+
+	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
+	cam->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+}
 
 //---------------------------------------------------------------------------
 #define WIN32_LEAN_AND_MEAN
