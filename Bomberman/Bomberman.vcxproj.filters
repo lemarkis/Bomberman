@@ -1,16 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="BombermanApplication.h" />
+    <ClInclude Include="AdvancedOgreFramework.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="AppState.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="AppStateManager.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="BombermanApplication.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="DotSceneLoader.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuState.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseState.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="SplashScreenState.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BombermanApplication.cpp" />
+    <ClCompile Include="AdvancedOgreFramework.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="AppStateManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="BombermanApplication.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="DotSceneLoader.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuState.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseState.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="SplashScreenState.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Bomberman.rc" />
     <Image Include="Bomberman.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\bin\x86-Debug\my_resources_d.cfg" />
+    <Filter Include="include">
+      <UniqueIdentifier>{7134c201-7569-4418-ab38-ae58d8abee83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{d8b2bef9-5b7c-4a7d-a006-1f5fa87b8a94}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\bin\x86-Debug\resources.cfg" />
   </ItemGroup>
 </Project>
