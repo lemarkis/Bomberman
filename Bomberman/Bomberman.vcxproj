@@ -320,22 +320,34 @@ echo Zip=$(OGRE_HOME)\Media\packs\SdkTrays.zip&gt;&gt;%resourcescfg%
     <ClInclude Include="AdvancedOgreFramework.hpp" />
     <ClInclude Include="AppState.hpp" />
     <ClInclude Include="AppStateManager.hpp" />
+    <ClInclude Include="Block.hpp" />
     <ClInclude Include="BombermanApplication.hpp" />
     <ClInclude Include="DotSceneLoader.hpp" />
+    <ClInclude Include="AppFactory.hpp" />
     <ClInclude Include="GameState.hpp" />
+    <ClInclude Include="Ground.hpp" />
+    <ClInclude Include="HumanBomber.hpp" />
     <ClInclude Include="MenuState.hpp" />
+    <ClInclude Include="NewMOC.h" />
     <ClInclude Include="PauseState.hpp" />
+    <ClInclude Include="Bomber.hpp" />
     <ClInclude Include="rapidxml.hpp" />
     <ClInclude Include="SplashScreenState.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdvancedOgreFramework.cpp" />
     <ClCompile Include="AppStateManager.cpp" />
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Bomber.cpp" />
     <ClCompile Include="BombermanApplication.cpp" />
     <ClCompile Include="DotSceneLoader.cpp" />
+    <ClCompile Include="AppFactory.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="HumanBomber.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="NewMOC.cpp" />
     <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="SplashScreenState.cpp" />
   </ItemGroup>

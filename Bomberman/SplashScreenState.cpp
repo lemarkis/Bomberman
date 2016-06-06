@@ -29,7 +29,7 @@ void SplashScreenState::enter()
 	OgreFramework::getSingletonPtr()->m_pViewport->setCamera(m_pCamera);
 
 	OgreFramework::getSingletonPtr()->m_pTrayMgr->destroyAllWidgets();
-	OgreFramework::getSingletonPtr()->m_pTrayMgr->createButton(OgreBites::TL_BOTTOM, "EnterBtn", "Press Enter...", 250);
+	OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_BOTTOM, "EnterBtn", "Appuyez sur Entree pour commencer...", 355);
 
 	createScene();
 }
@@ -130,5 +130,5 @@ void SplashScreenState::buttonHit(OgreBites::Button *button)
 	if (button->getName() == "ExitBtn")
 		m_bQuit = true;
 	else if (button->getName() == "EnterBtn")
-		changeAppState(findByName("GameState"));
+		changeAppState(findByName("MenuState"));
 }

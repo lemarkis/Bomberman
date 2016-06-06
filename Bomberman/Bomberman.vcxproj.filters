@@ -31,6 +31,24 @@
     <ClInclude Include="SplashScreenState.hpp">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="NewMOC.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomber.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="AppFactory.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanBomber.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdvancedOgreFramework.cpp">
@@ -58,6 +76,24 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="SplashScreenState.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="NewMOC.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomber.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="AppFactory.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanBomber.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

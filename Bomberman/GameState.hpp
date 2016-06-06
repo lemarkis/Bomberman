@@ -6,11 +6,15 @@
 //|||||||||||||||||||||||||||||||||||||||||||||||
 
 #include "AppState.hpp"
+#include "NewMOC.h"
+#include "AppFactory.hpp"
 
 #include "DotSceneLoader.hpp"
 
 #include <OgreSubEntity.h>
 #include <OgreMaterialManager.h>
+
+#include <stack>
 
 //|||||||||||||||||||||||||||||||||||||||||||||||
 
@@ -46,18 +50,9 @@ public:
 	bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 	bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
-	void onLeftPressed(const OIS::MouseEvent &evt);
-    void itemSelected(OgreBites::SelectMenu* menu);
-
 	void update(double timeSinceLastFrame);
 
 private:
-	Ogre::SceneNode*			m_pOgreHeadNode;
-	Ogre::Entity*				m_pOgreHeadEntity;
-	Ogre::MaterialPtr			m_pOgreHeadMat;
-	Ogre::MaterialPtr			m_pOgreHeadMatHigh;
-
-    OgreBites::ParamsPanel*		m_pDetailsPanel;
 	bool						m_bQuit;
 
 	Ogre::Vector3				m_TranslateVector;
@@ -66,11 +61,7 @@ private:
 	float						m_MoveScale;
 	Ogre::Degree				m_RotScale;
 
-	Ogre::RaySceneQuery*		m_pRSQ;
-	Ogre::SceneNode*			m_pCurrentObject;
-	Ogre::Entity*				m_pCurrentEntity;
-	bool						m_bLMouseDown, m_bRMouseDown;
-	bool						m_bSettingsMode;
+	AppFactory*					m_Factory;
 };
 
 //|||||||||||||||||||||||||||||||||||||||||||||||
