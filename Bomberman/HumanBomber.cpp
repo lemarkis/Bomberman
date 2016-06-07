@@ -60,17 +60,12 @@ void HumanBomber::update(double timeSinceLastFrame)
 	move();
 }
 
-bool HumanBomber::checkCollision(Collision::CollisionTools * pCollisionTools)
-{
-	return false;
-}
-
 void HumanBomber::getUnbufferedInput()
 {
 	OIS::Keyboard * lKeyboard = OgreFramework::getSingletonPtr()->m_pKeyboard;
 	if (lKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
-		if (!checkCollision(collisionTools))
+		if (!checkCollision(OIS::KC_LEFT))
 		{
 			translateVector.x = -moveSpeed;
 		}
@@ -80,7 +75,7 @@ void HumanBomber::getUnbufferedInput()
 
 	if (lKeyboard->isKeyDown(OIS::KC_RIGHT))
 	{
-		if (!checkCollision(collisionTools))
+		if (!checkCollision(OIS::KC_RIGHT))
 		{
 			translateVector.x = moveSpeed;
 		}
@@ -90,7 +85,7 @@ void HumanBomber::getUnbufferedInput()
 
 	if (lKeyboard->isKeyDown(OIS::KC_UP))
 	{
-		if (!checkCollision(collisionTools))
+		if (!checkCollision(OIS::KC_UP))
 		{
 			translateVector.z = -moveSpeed;
 		}
@@ -100,7 +95,7 @@ void HumanBomber::getUnbufferedInput()
 
 	if (lKeyboard->isKeyDown(OIS::KC_DOWN))
 	{
-		if (!checkCollision(collisionTools))
+		if (!checkCollision(OIS::KC_DOWN))
 		{
 			translateVector.z = moveSpeed;
 		}

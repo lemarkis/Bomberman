@@ -20,7 +20,6 @@ public:
 	void update(double timeSinceLastFrame);
 
 private:
-	bool checkCollision(Collision::CollisionTools * pCollisionTools);
 	void getUnbufferedInput();
 	void move();
 

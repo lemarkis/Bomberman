@@ -26,6 +26,7 @@ public:
 
 	virtual void update(double timeSinceLastFrame) = 0;
 
+	bool checkCollision(OIS::KeyCode dir);
 private:
 
 protected:
