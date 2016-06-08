@@ -21,6 +21,8 @@ void GameState::enter()
     m_pSceneMgr = OgreFramework::getSingletonPtr()->m_pRoot->createSceneManager(Ogre::ST_GENERIC, "GameSceneMgr");
     m_pSceneMgr->setAmbientLight(Ogre::ColourValue(0.7f, 0.7f, 0.7f));
 
+	new AppFactory(m_pSceneMgr);
+
     m_pSceneMgr->addRenderQueueListener(OgreFramework::getSingletonPtr()->m_pOverlaySystem);
 
     m_pCamera = m_pSceneMgr->createCamera("GameCamera");
@@ -32,8 +34,6 @@ void GameState::enter()
         Ogre::Real(OgreFramework::getSingletonPtr()->m_pViewport->getActualHeight()));
 
     OgreFramework::getSingletonPtr()->m_pViewport->setCamera(m_pCamera);
-
-	m_Factory = new AppFactory(m_pSceneMgr);
 
     buildGUI();
 
@@ -71,6 +71,8 @@ void GameState::exit()
 
     if(m_pSceneMgr)
         OgreFramework::getSingletonPtr()->m_pRoot->destroySceneManager(m_pSceneMgr);
+
+	delete AppFactory::getSingletonPtr();
 }
 
 //|||||||||||||||||||||||||||||||||||||||||||||||
@@ -79,122 +81,123 @@ void GameState::createScene()
 {
 	m_pSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	m_pSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+	AppFactory * factory = AppFactory::getSingletonPtr();
 	//Plaques
-	m_Factory->createGround("Plaque1", Ogre::Vector3(3.18, 0, 3.18));
-	m_Factory->createGround("Plaque2", Ogre::Vector3(3.18, 0, 15.98));
-	m_Factory->createGround("Plaque3", Ogre::Vector3(3.18, 0, 28.78));
-	m_Factory->createGround("Plaque4", Ogre::Vector3(3.18, 0, 41.58));
-	m_Factory->createGround("Plaque5", Ogre::Vector3(15.98, 0, 3.18));
-	m_Factory->createGround("Plaque6", Ogre::Vector3(15.98, 0, 15.98));
-	m_Factory->createGround("Plaque7", Ogre::Vector3(15.98, 0, 28.78));
-	m_Factory->createGround("Plaque8", Ogre::Vector3(15.98, 0, 41.58));
-	m_Factory->createGround("Plaque9", Ogre::Vector3(28.78, 0, 3.18));
-	m_Factory->createGround("Plaque10", Ogre::Vector3(28.78, 0, 15.98));
-	m_Factory->createGround("Plaque11", Ogre::Vector3(28.78, 0, 28.78));
-	m_Factory->createGround("Plaque12", Ogre::Vector3(28.78, 0, 41.58));
-	m_Factory->createGround("Plaque13", Ogre::Vector3(41.58, 0, 3.18));
-	m_Factory->createGround("Plaque14", Ogre::Vector3(41.58, 0, 15.98));
-	m_Factory->createGround("Plaque15", Ogre::Vector3(41.58, 0, 28.78));
-	m_Factory->createGround("Plaque16", Ogre::Vector3(41.58, 0, 41.58));
+	factory->createGround("Plaque1", Ogre::Vector3(3.18, 0, 3.18));
+	factory->createGround("Plaque2", Ogre::Vector3(3.18, 0, 15.98));
+	factory->createGround("Plaque3", Ogre::Vector3(3.18, 0, 28.78));
+	factory->createGround("Plaque4", Ogre::Vector3(3.18, 0, 41.58));
+	factory->createGround("Plaque5", Ogre::Vector3(15.98, 0, 3.18));
+	factory->createGround("Plaque6", Ogre::Vector3(15.98, 0, 15.98));
+	factory->createGround("Plaque7", Ogre::Vector3(15.98, 0, 28.78));
+	factory->createGround("Plaque8", Ogre::Vector3(15.98, 0, 41.58));
+	factory->createGround("Plaque9", Ogre::Vector3(28.78, 0, 3.18));
+	factory->createGround("Plaque10", Ogre::Vector3(28.78, 0, 15.98));
+	factory->createGround("Plaque11", Ogre::Vector3(28.78, 0, 28.78));
+	factory->createGround("Plaque12", Ogre::Vector3(28.78, 0, 41.58));
+	factory->createGround("Plaque13", Ogre::Vector3(41.58, 0, 3.18));
+	factory->createGround("Plaque14", Ogre::Vector3(41.58, 0, 15.98));
+	factory->createGround("Plaque15", Ogre::Vector3(41.58, 0, 28.78));
+	factory->createGround("Plaque16", Ogre::Vector3(41.58, 0, 41.58));
 	//player
-	m_Factory->createBomber("Player1", Ogre::Vector3(22.38, 0, 22.38), false);
+	factory->createBomber("Player1", Ogre::Vector3(22.38, 0, 22.38), false);
 	//haut
-	m_Factory->createBlock("Static1", Ogre::Vector3(0, 0, 0), false);
-	m_Factory->createBlock("Static2", Ogre::Vector3(3.18, 0, 0), false);
-	m_Factory->createBlock("Static3", Ogre::Vector3(6.38, 0, 0), false);
-	m_Factory->createBlock("Static4", Ogre::Vector3(9.58, 0, 0), false);
-	m_Factory->createBlock("Static5", Ogre::Vector3(12.78, 0, 0), false);
-	m_Factory->createBlock("Static6", Ogre::Vector3(15.98, 0, 0), false);
-	m_Factory->createBlock("Static7", Ogre::Vector3(19.18, 0, 0), false);
-	m_Factory->createBlock("Static8", Ogre::Vector3(22.38, 0, 0), false);
-	m_Factory->createBlock("Static9", Ogre::Vector3(25.58, 0, 0), false);
-	m_Factory->createBlock("Static10", Ogre::Vector3(28.78, 0, 0), false);
-	m_Factory->createBlock("Static11", Ogre::Vector3(31.98, 0, 0), false);
-	m_Factory->createBlock("Static12", Ogre::Vector3(35.18, 0, 0), false);
-	m_Factory->createBlock("Static13", Ogre::Vector3(38.38, 0, 0), false);
-	m_Factory->createBlock("Static14", Ogre::Vector3(41.58, 0, 0), false);
+	factory->createBlock("Static1", Ogre::Vector3(0, 0, 0), false);
+	factory->createBlock("Static2", Ogre::Vector3(3.18, 0, 0), false);
+	factory->createBlock("Static3", Ogre::Vector3(6.38, 0, 0), false);
+	factory->createBlock("Static4", Ogre::Vector3(9.58, 0, 0), false);
+	factory->createBlock("Static5", Ogre::Vector3(12.78, 0, 0), false);
+	factory->createBlock("Static6", Ogre::Vector3(15.98, 0, 0), false);
+	factory->createBlock("Static7", Ogre::Vector3(19.18, 0, 0), false);
+	factory->createBlock("Static8", Ogre::Vector3(22.38, 0, 0), false);
+	factory->createBlock("Static9", Ogre::Vector3(25.58, 0, 0), false);
+	factory->createBlock("Static10", Ogre::Vector3(28.78, 0, 0), false);
+	factory->createBlock("Static11", Ogre::Vector3(31.98, 0, 0), false);
+	factory->createBlock("Static12", Ogre::Vector3(35.18, 0, 0), false);
+	factory->createBlock("Static13", Ogre::Vector3(38.38, 0, 0), false);
+	factory->createBlock("Static14", Ogre::Vector3(41.58, 0, 0), false);
 	//gauche
-	m_Factory->createBlock("Static17", Ogre::Vector3(0, 0, 3.18), false);
-	m_Factory->createBlock("Static18", Ogre::Vector3(0, 0, 6.38), false);
-	m_Factory->createBlock("Static19", Ogre::Vector3(0, 0, 9.58), false);
-	m_Factory->createBlock("Static20", Ogre::Vector3(0, 0, 12.78), false);
-	m_Factory->createBlock("Static21", Ogre::Vector3(0, 0, 15.98), false);
-	m_Factory->createBlock("Static22", Ogre::Vector3(0, 0, 19.18), false);
-	m_Factory->createBlock("Static23", Ogre::Vector3(0, 0, 22.38), false);
-	m_Factory->createBlock("Static24", Ogre::Vector3(0, 0, 25.58), false);
-	m_Factory->createBlock("Static25", Ogre::Vector3(0, 0, 28.78), false);
-	m_Factory->createBlock("Static26", Ogre::Vector3(0, 0, 31.98), false);
-	m_Factory->createBlock("Static27", Ogre::Vector3(0, 0, 35.18), false);
-	m_Factory->createBlock("Static28", Ogre::Vector3(0, 0, 38.38), false);
-	m_Factory->createBlock("Static29", Ogre::Vector3(0, 0, 41.58), false);
-	m_Factory->createBlock("Static30", Ogre::Vector3(0, 0, 44.78), false);
+	factory->createBlock("Static17", Ogre::Vector3(0, 0, 3.18), false);
+	factory->createBlock("Static18", Ogre::Vector3(0, 0, 6.38), false);
+	factory->createBlock("Static19", Ogre::Vector3(0, 0, 9.58), false);
+	factory->createBlock("Static20", Ogre::Vector3(0, 0, 12.78), false);
+	factory->createBlock("Static21", Ogre::Vector3(0, 0, 15.98), false);
+	factory->createBlock("Static22", Ogre::Vector3(0, 0, 19.18), false);
+	factory->createBlock("Static23", Ogre::Vector3(0, 0, 22.38), false);
+	factory->createBlock("Static24", Ogre::Vector3(0, 0, 25.58), false);
+	factory->createBlock("Static25", Ogre::Vector3(0, 0, 28.78), false);
+	factory->createBlock("Static26", Ogre::Vector3(0, 0, 31.98), false);
+	factory->createBlock("Static27", Ogre::Vector3(0, 0, 35.18), false);
+	factory->createBlock("Static28", Ogre::Vector3(0, 0, 38.38), false);
+	factory->createBlock("Static29", Ogre::Vector3(0, 0, 41.58), false);
+	factory->createBlock("Static30", Ogre::Vector3(0, 0, 44.78), false);
 	//droite
-	m_Factory->createBlock("Static33", Ogre::Vector3(44.78, 0, 0), false);
-	m_Factory->createBlock("Static34", Ogre::Vector3(44.78, 0, 3.18), false);
-	m_Factory->createBlock("Static35", Ogre::Vector3(44.78, 0, 6.38), false);
-	m_Factory->createBlock("Static36", Ogre::Vector3(44.78, 0, 9.58), false);
-	m_Factory->createBlock("Static37", Ogre::Vector3(44.78, 0, 12.78), false);
-	m_Factory->createBlock("Static38", Ogre::Vector3(44.78, 0, 15.98), false);
-	m_Factory->createBlock("Static39", Ogre::Vector3(44.78, 0, 19.18), false);
-	m_Factory->createBlock("Static40", Ogre::Vector3(44.78, 0, 22.38), false);
-	m_Factory->createBlock("Static41", Ogre::Vector3(44.78, 0, 25.58), false);
-	m_Factory->createBlock("Static42", Ogre::Vector3(44.78, 0, 28.78), false);
-	m_Factory->createBlock("Static43", Ogre::Vector3(44.78, 0, 31.98), false);
-	m_Factory->createBlock("Static44", Ogre::Vector3(44.78, 0, 35.18), false);
-	m_Factory->createBlock("Static45", Ogre::Vector3(44.78, 0, 38.38), false);
-	m_Factory->createBlock("Static46", Ogre::Vector3(44.78, 0, 41.58), false);
+	factory->createBlock("Static33", Ogre::Vector3(44.78, 0, 0), false);
+	factory->createBlock("Static34", Ogre::Vector3(44.78, 0, 3.18), false);
+	factory->createBlock("Static35", Ogre::Vector3(44.78, 0, 6.38), false);
+	factory->createBlock("Static36", Ogre::Vector3(44.78, 0, 9.58), false);
+	factory->createBlock("Static37", Ogre::Vector3(44.78, 0, 12.78), false);
+	factory->createBlock("Static38", Ogre::Vector3(44.78, 0, 15.98), false);
+	factory->createBlock("Static39", Ogre::Vector3(44.78, 0, 19.18), false);
+	factory->createBlock("Static40", Ogre::Vector3(44.78, 0, 22.38), false);
+	factory->createBlock("Static41", Ogre::Vector3(44.78, 0, 25.58), false);
+	factory->createBlock("Static42", Ogre::Vector3(44.78, 0, 28.78), false);
+	factory->createBlock("Static43", Ogre::Vector3(44.78, 0, 31.98), false);
+	factory->createBlock("Static44", Ogre::Vector3(44.78, 0, 35.18), false);
+	factory->createBlock("Static45", Ogre::Vector3(44.78, 0, 38.38), false);
+	factory->createBlock("Static46", Ogre::Vector3(44.78, 0, 41.58), false);
 	//bas
-	m_Factory->createBlock("Static50", Ogre::Vector3(3.18, 0, 44.78), false);
-	m_Factory->createBlock("Static51", Ogre::Vector3(6.38, 0, 44.78), false);
-	m_Factory->createBlock("Static52", Ogre::Vector3(9.58, 0, 44.78), false);
-	m_Factory->createBlock("Static53", Ogre::Vector3(12.78, 0, 44.78), false);
-	m_Factory->createBlock("Static54", Ogre::Vector3(15.98, 0, 44.78), false);
-	m_Factory->createBlock("Static55", Ogre::Vector3(19.18, 0, 44.78), false);
-	m_Factory->createBlock("Static56", Ogre::Vector3(22.38, 0, 44.78), false);
-	m_Factory->createBlock("Static57", Ogre::Vector3(25.58, 0, 44.78), false);
-	m_Factory->createBlock("Static58", Ogre::Vector3(28.78, 0, 44.78), false);
-	m_Factory->createBlock("Static59", Ogre::Vector3(31.98, 0, 44.78), false);
-	m_Factory->createBlock("Static60", Ogre::Vector3(35.18, 0, 44.78), false);
-	m_Factory->createBlock("Static61", Ogre::Vector3(38.38, 0, 44.78), false);
-	m_Factory->createBlock("Static62", Ogre::Vector3(41.58, 0, 44.78), false);
-	m_Factory->createBlock("Static63", Ogre::Vector3(44.78, 0, 44.78), false);
+	factory->createBlock("Static50", Ogre::Vector3(3.18, 0, 44.78), false);
+	factory->createBlock("Static51", Ogre::Vector3(6.38, 0, 44.78), false);
+	factory->createBlock("Static52", Ogre::Vector3(9.58, 0, 44.78), false);
+	factory->createBlock("Static53", Ogre::Vector3(12.78, 0, 44.78), false);
+	factory->createBlock("Static54", Ogre::Vector3(15.98, 0, 44.78), false);
+	factory->createBlock("Static55", Ogre::Vector3(19.18, 0, 44.78), false);
+	factory->createBlock("Static56", Ogre::Vector3(22.38, 0, 44.78), false);
+	factory->createBlock("Static57", Ogre::Vector3(25.58, 0, 44.78), false);
+	factory->createBlock("Static58", Ogre::Vector3(28.78, 0, 44.78), false);
+	factory->createBlock("Static59", Ogre::Vector3(31.98, 0, 44.78), false);
+	factory->createBlock("Static60", Ogre::Vector3(35.18, 0, 44.78), false);
+	factory->createBlock("Static61", Ogre::Vector3(38.38, 0, 44.78), false);
+	factory->createBlock("Static62", Ogre::Vector3(41.58, 0, 44.78), false);
+	factory->createBlock("Static63", Ogre::Vector3(44.78, 0, 44.78), false);
 	//Interieur
-	m_Factory->createBlock("StaticI1", Ogre::Vector3(6.38, 0, 6.38), false);
-	m_Factory->createBlock("StaticI2", Ogre::Vector3(12.78, 0, 6.38), false);
-	m_Factory->createBlock("StaticI3", Ogre::Vector3(19.18, 0, 6.38), false);
-	m_Factory->createBlock("StaticI5", Ogre::Vector3(25.58, 0, 6.38), false);
-	m_Factory->createBlock("StaticI6", Ogre::Vector3(31.98, 0, 6.38), false);
-	m_Factory->createBlock("StaticI7", Ogre::Vector3(38.38, 0, 6.38), false);
-	m_Factory->createBlock("StaticI8", Ogre::Vector3(6.38, 0, 12.78), false);
-	m_Factory->createBlock("StaticI9", Ogre::Vector3(12.78, 0, 12.78), false);
-	m_Factory->createBlock("StaticI10", Ogre::Vector3(19.18, 0, 12.78), false);
-	m_Factory->createBlock("StaticI12", Ogre::Vector3(25.58, 0, 12.78), false);
-	m_Factory->createBlock("StaticI13", Ogre::Vector3(31.98, 0, 12.78), false);
-	m_Factory->createBlock("StaticI14", Ogre::Vector3(38.38, 0, 12.78), false);
-	m_Factory->createBlock("StaticI15", Ogre::Vector3(6.38, 0, 19.18), false);
-	m_Factory->createBlock("StaticI16", Ogre::Vector3(12.78, 0, 19.18), false);
-	m_Factory->createBlock("StaticI17", Ogre::Vector3(19.18, 0, 19.18), false);
-	m_Factory->createBlock("StaticI19", Ogre::Vector3(25.58, 0, 19.18), false);
-	m_Factory->createBlock("StaticI20", Ogre::Vector3(31.98, 0, 19.18), false);
-	m_Factory->createBlock("StaticI21", Ogre::Vector3(38.38, 0, 19.18), false);
-	m_Factory->createBlock("StaticI29", Ogre::Vector3(6.38, 0, 25.58), false);
-	m_Factory->createBlock("StaticI30", Ogre::Vector3(12.78, 0, 25.58), false);
-	m_Factory->createBlock("StaticI31", Ogre::Vector3(19.18, 0, 25.58), false);
-	m_Factory->createBlock("StaticI33", Ogre::Vector3(25.58, 0, 25.58), false);
-	m_Factory->createBlock("StaticI34", Ogre::Vector3(31.98, 0, 25.58), false);
-	m_Factory->createBlock("StaticI35", Ogre::Vector3(38.38, 0, 25.58), false);
-	m_Factory->createBlock("StaticI36", Ogre::Vector3(6.38, 0, 31.98), false);
-	m_Factory->createBlock("StaticI37", Ogre::Vector3(12.78, 0, 31.98), false);
-	m_Factory->createBlock("StaticI38", Ogre::Vector3(19.18, 0, 31.98), false);
-	m_Factory->createBlock("StaticI40", Ogre::Vector3(25.58, 0, 31.98), false);
-	m_Factory->createBlock("StaticI41", Ogre::Vector3(31.98, 0, 31.98), false);
-	m_Factory->createBlock("StaticI42", Ogre::Vector3(38.38, 0, 31.98), false);
-	m_Factory->createBlock("StaticI43", Ogre::Vector3(6.38, 0, 38.38), false);
-	m_Factory->createBlock("StaticI44", Ogre::Vector3(12.78, 0, 38.38), false);
-	m_Factory->createBlock("StaticI45", Ogre::Vector3(19.18, 0, 38.38), false);
-	m_Factory->createBlock("StaticI47", Ogre::Vector3(25.58, 0, 38.38), false);
-	m_Factory->createBlock("StaticI48", Ogre::Vector3(31.98, 0, 38.38), false);
-	m_Factory->createBlock("StaticI49", Ogre::Vector3(38.38, 0, 38.38), false);
+	factory->createBlock("StaticI1", Ogre::Vector3(6.38, 0, 6.38), false);
+	factory->createBlock("StaticI2", Ogre::Vector3(12.78, 0, 6.38), false);
+	factory->createBlock("StaticI3", Ogre::Vector3(19.18, 0, 6.38), false);
+	factory->createBlock("StaticI5", Ogre::Vector3(25.58, 0, 6.38), false);
+	factory->createBlock("StaticI6", Ogre::Vector3(31.98, 0, 6.38), false);
+	factory->createBlock("StaticI7", Ogre::Vector3(38.38, 0, 6.38), false);
+	factory->createBlock("StaticI8", Ogre::Vector3(6.38, 0, 12.78), false);
+	factory->createBlock("StaticI9", Ogre::Vector3(12.78, 0, 12.78), false);
+	factory->createBlock("StaticI10", Ogre::Vector3(19.18, 0, 12.78), false);
+	factory->createBlock("StaticI12", Ogre::Vector3(25.58, 0, 12.78), false);
+	factory->createBlock("StaticI13", Ogre::Vector3(31.98, 0, 12.78), false);
+	factory->createBlock("StaticI14", Ogre::Vector3(38.38, 0, 12.78), false);
+	factory->createBlock("StaticI15", Ogre::Vector3(6.38, 0, 19.18), false);
+	factory->createBlock("StaticI16", Ogre::Vector3(12.78, 0, 19.18), false);
+	factory->createBlock("StaticI17", Ogre::Vector3(19.18, 0, 19.18), false);
+	factory->createBlock("StaticI19", Ogre::Vector3(25.58, 0, 19.18), false);
+	factory->createBlock("StaticI20", Ogre::Vector3(31.98, 0, 19.18), false);
+	factory->createBlock("StaticI21", Ogre::Vector3(38.38, 0, 19.18), false);
+	factory->createBlock("StaticI29", Ogre::Vector3(6.38, 0, 25.58), false);
+	factory->createBlock("StaticI30", Ogre::Vector3(12.78, 0, 25.58), false);
+	factory->createBlock("StaticI31", Ogre::Vector3(19.18, 0, 25.58), false);
+	factory->createBlock("StaticI33", Ogre::Vector3(25.58, 0, 25.58), false);
+	factory->createBlock("StaticI34", Ogre::Vector3(31.98, 0, 25.58), false);
+	factory->createBlock("StaticI35", Ogre::Vector3(38.38, 0, 25.58), false);
+	factory->createBlock("StaticI36", Ogre::Vector3(6.38, 0, 31.98), false);
+	factory->createBlock("StaticI37", Ogre::Vector3(12.78, 0, 31.98), false);
+	factory->createBlock("StaticI38", Ogre::Vector3(19.18, 0, 31.98), false);
+	factory->createBlock("StaticI40", Ogre::Vector3(25.58, 0, 31.98), false);
+	factory->createBlock("StaticI41", Ogre::Vector3(31.98, 0, 31.98), false);
+	factory->createBlock("StaticI42", Ogre::Vector3(38.38, 0, 31.98), false);
+	factory->createBlock("StaticI43", Ogre::Vector3(6.38, 0, 38.38), false);
+	factory->createBlock("StaticI44", Ogre::Vector3(12.78, 0, 38.38), false);
+	factory->createBlock("StaticI45", Ogre::Vector3(19.18, 0, 38.38), false);
+	factory->createBlock("StaticI47", Ogre::Vector3(25.58, 0, 38.38), false);
+	factory->createBlock("StaticI48", Ogre::Vector3(31.98, 0, 38.38), false);
+	factory->createBlock("StaticI49", Ogre::Vector3(38.38, 0, 38.38), false);
 	//light
 	Ogre::Light *spotlight = m_pSceneMgr->createLight("Spotlight");
 	spotlight->setDiffuseColour(.7, .7, .7);
@@ -207,7 +210,7 @@ void GameState::createScene()
 
 bool GameState::keyPressed(const OIS::KeyEvent &keyEventRef)
 {
-	m_Factory->injectKeyPressed(keyEventRef);
+	AppFactory::getSingletonPtr()->injectKeyPressed(keyEventRef);
 
     if(OgreFramework::getSingletonPtr()->m_pKeyboard->isKeyDown(OIS::KC_ESCAPE))
     {
@@ -222,7 +225,7 @@ bool GameState::keyPressed(const OIS::KeyEvent &keyEventRef)
 
 bool GameState::keyReleased(const OIS::KeyEvent &keyEventRef)
 {
-	m_Factory->injectKeyReleased(keyEventRef);
+	AppFactory::getSingletonPtr()->injectKeyReleased(keyEventRef);
 
     OgreFramework::getSingletonPtr()->keyPressed(keyEventRef);
     return true;
@@ -232,7 +235,7 @@ bool GameState::keyReleased(const OIS::KeyEvent &keyEventRef)
 
 bool GameState::mouseMoved(const OIS::MouseEvent &evt)
 {
-	m_Factory->injectMouseMoved(evt);
+	AppFactory::getSingletonPtr()->injectMouseMoved(evt);
 
 	m_pCamera->yaw(Ogre::Degree(evt.state.X.rel * -0.1f));
 	m_pCamera->pitch(Ogre::Degree(evt.state.Y.rel * -0.1f));
@@ -244,7 +247,7 @@ bool GameState::mouseMoved(const OIS::MouseEvent &evt)
 
 bool GameState::mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-	m_Factory->injectMousePressed(evt, id);
+	AppFactory::getSingletonPtr()->injectMousePressed(evt, id);
 
     //if(OgreFramework::getSingletonPtr()->m_pTrayMgr->injectMouseDown(evt, id)) return true;
 
@@ -255,7 +258,7 @@ bool GameState::mousePressed(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 
 bool GameState::mouseReleased(const OIS::MouseEvent &evt, OIS::MouseButtonID id)
 {
-	m_Factory->injectMouseReleased(evt, id);
+	AppFactory::getSingletonPtr()->injectMouseReleased(evt, id);
 
     //if(OgreFramework::getSingletonPtr()->m_pTrayMgr->injectMouseUp(evt, id)) return true;
 
@@ -273,9 +276,8 @@ void GameState::moveCamera()
 
 void GameState::getInput()
 {
-	OIS::Keyboard *lKeyboard = OgreFramework::getSingletonPtr()->m_pKeyboard;
-	
 	//Camera
+	OIS::Keyboard *lKeyboard = OgreFramework::getSingletonPtr()->m_pKeyboard;
 	if (lKeyboard->isKeyDown(OIS::KC_A))
 		m_TranslateVector.x = -m_MoveScale;
 
@@ -308,7 +310,7 @@ void GameState::update(double timeSinceLastFrame)
         return;
     }
 
-	m_Factory->injectUpdate(timeSinceLastFrame);
+	AppFactory::getSingletonPtr()->injectUpdate(timeSinceLastFrame);
 
     m_MoveScale = m_MoveSpeed   * timeSinceLastFrame;
     m_RotScale  = m_RotateSpeed * timeSinceLastFrame;
@@ -325,7 +327,7 @@ void GameState::buildGUI()
 {
     OgreFramework::getSingletonPtr()->m_pTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
     OgreFramework::getSingletonPtr()->m_pTrayMgr->showLogo(OgreBites::TL_BOTTOMRIGHT);
-    OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_TOP, "GameLbl", "Game mode", 250);
+    //OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_TOP, "GameLbl", "Game mode", 250);
     OgreFramework::getSingletonPtr()->m_pTrayMgr->hideCursor();
 }
 

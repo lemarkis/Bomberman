@@ -20,7 +20,7 @@ public:
 	void update(double timeSinceLastFrame);
 
 private:
-	void getUnbufferedInput();
+	void getUnbufferedInput(double timeSinceLastFrame);
 	void move();
 
 protected:

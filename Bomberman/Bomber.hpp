@@ -27,6 +27,7 @@ public:
 	virtual void update(double timeSinceLastFrame) = 0;
 
 	bool checkCollision(OIS::KeyCode dir);
+	void dropBomb();
 private:
 
 protected:
@@ -34,6 +35,7 @@ protected:
 	Ogre::Entity*				entity;
 	Ogre::SceneNode*			node;
 	Ogre::AnimationState*		animation;
+	int							remainingBomb;
 
 	Collision::CollisionTools * collisionTools;
 };

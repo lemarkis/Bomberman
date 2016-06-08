@@ -1,7 +1,9 @@
 #include "Bomber.hpp"
+#include "AppFactory.hpp"
 
 Bomber::Bomber(Collision::CollisionTools * pCollisionTools, Ogre::String const & pName): name(pName), entity(nullptr), node(nullptr), animation(nullptr), collisionTools(pCollisionTools)
 {
+	remainingBomb = 2;
 }
 
 Bomber::~Bomber()
@@ -57,4 +59,25 @@ bool Bomber::checkCollision(OIS::KeyCode dir)
 		break;
 	}
 	return collided;
+}
+
+void Bomber::dropBomb()
+{
+	if (remainingBomb > 0)
+	{
+		int x = (node->getPosition().x / 3.2) + .8;
+		int z = (node->getPosition().z / 3.2) + .8;
+
+		Ogre::String bombName; //(name);
+		bombName.append("Bomb").append(std::to_string(remainingBomb));
+		AppFactory * factory = AppFactory::getSingletonPtr();
+		factory->createBomb(bombName, Ogre::Vector3(x * 3.2 - .02, 0, z * 3.2 - .02));
+		(factory->mapCollision)[z][x] = 1;
+		(factory->mapDanger)[z][x] = 1;
+		(factory->mapDanger)[z - 1][x] = 1;
+		(factory->mapDanger)[z + 1][x] = 1;
+		(factory->mapDanger)[z][x - 1] = 1;
+		(factory->mapDanger)[z][x + 1] = 1;
+		remainingBomb -= 1;
+	}
 }

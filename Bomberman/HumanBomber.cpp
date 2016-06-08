@@ -10,7 +10,7 @@ HumanBomber::HumanBomber(Ogre::SceneManager * pSceneMgr, Collision::CollisionToo
 	animation = entity->getAnimationState("my_animation");
 	animation->setLoop(true);
 
-	moveSpeed = 0.37f;
+	moveSpeed = 12.f;
 }
 
 HumanBomber::~HumanBomber()
@@ -19,6 +19,10 @@ HumanBomber::~HumanBomber()
 
 bool HumanBomber::keyPressed(const OIS::KeyEvent &keyEventRef)
 {
+	if (keyEventRef.key == OIS::KC_SPACE)
+	{
+		dropBomb();
+	}
 	return true;
 }
 
@@ -56,18 +60,18 @@ void HumanBomber::update(double timeSinceLastFrame)
 	translateVector = Ogre::Vector3::ZERO;
 	lookAtVector = Ogre::Vector3::ZERO;
 
-	getUnbufferedInput();
+	getUnbufferedInput(timeSinceLastFrame);
 	move();
 }
 
-void HumanBomber::getUnbufferedInput()
+void HumanBomber::getUnbufferedInput(double timeSinceLastFrame)
 {
 	OIS::Keyboard * lKeyboard = OgreFramework::getSingletonPtr()->m_pKeyboard;
 	if (lKeyboard->isKeyDown(OIS::KC_LEFT))
 	{
 		if (!checkCollision(OIS::KC_LEFT))
 		{
-			translateVector.x = -moveSpeed;
+			translateVector.x = -(moveSpeed * timeSinceLastFrame / 1000);
 		}
 		lookAtVector.x = -1;
 		animation->setEnabled(true);
@@ -77,7 +81,7 @@ void HumanBomber::getUnbufferedInput()
 	{
 		if (!checkCollision(OIS::KC_RIGHT))
 		{
-			translateVector.x = moveSpeed;
+			translateVector.x = (moveSpeed * timeSinceLastFrame / 1000);
 		}
 		lookAtVector.x = 1;
 		animation->setEnabled(true);
@@ -87,7 +91,7 @@ void HumanBomber::getUnbufferedInput()
 	{
 		if (!checkCollision(OIS::KC_UP))
 		{
-			translateVector.z = -moveSpeed;
+			translateVector.z = -(moveSpeed * timeSinceLastFrame / 1000);
 		}
 		lookAtVector.z = -1;
 		animation->setEnabled(true);
@@ -97,7 +101,7 @@ void HumanBomber::getUnbufferedInput()
 	{
 		if (!checkCollision(OIS::KC_DOWN))
 		{
-			translateVector.z = moveSpeed;
+			translateVector.z = (moveSpeed * timeSinceLastFrame / 1000);
 		}
 		lookAtVector.z = 1;
 		animation->setEnabled(true);

@@ -49,6 +49,9 @@
     <ClInclude Include="Block.hpp">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="Bomb.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdvancedOgreFramework.cpp">
@@ -94,6 +97,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="Block.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

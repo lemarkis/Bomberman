@@ -1,5 +1,13 @@
 #include "AppFactory.hpp"
 
+template<> AppFactory * Ogre::Singleton<AppFactory>::msSingleton = 0;
+
+template<typename T>
+static void removeEntityCollision(T pElement)
+{
+	AppFactory::getSingletonPtr()->getCollisionTools()->remove_entity(pElement->getEntity());
+}
+
 AppFactory::AppFactory(Ogre::SceneManager * pSceneMgr): sceneMgr(pSceneMgr)
 {
 	collisionTools = new Collision::CollisionTools();
@@ -65,9 +73,18 @@ void AppFactory::createBlock(Ogre::String const & pName, Ogre::Vector3 const pPo
 	}
 	blocks.push_back(block);
 	collisionTools->register_entity(block->getEntity());
-	int x = pPosition.x / 3.18;
-	int z = pPosition.z / 3.18;
+	int x = (pPosition.x / 3.2) + .02;
+	int z = (pPosition.z / 3.2) + .02;
 	mapCollision[z][x] = 1;
+}
+
+void AppFactory::createBomb(Ogre::String const & pName, Ogre::Vector3 const pPosition)
+{
+	Ogre::String str = Ogre::String("Creating bomb ").append(pName);
+	OgreFramework::getSingletonPtr()->m_pLog->logMessage(str);
+	Bomb * bomb = new Bomb(sceneMgr, pName, pPosition);
+	bombs.push_back(bomb);
+	collisionTools->register_static_entity(bomb->getEntity(), bomb->getNode()->getPosition(), bomb->getNode()->getOrientation(), bomb->getNode()->getScale());
 }
 
 void AppFactory::destroyGround(Ogre::String const & pName)
@@ -76,9 +93,7 @@ void AppFactory::destroyGround(Ogre::String const & pName)
 	{
 		if (!((*it)->getName().compare(pName)))
 		{
-			Ground * ground = (*it);
 			grounds.erase(it);
-			delete ground;
 		}
 	}
 }
@@ -89,44 +104,55 @@ void AppFactory::destroyBomber(Ogre::String const & pName)
 	{
 		if (!((*it)->getName().compare(pName)))
 		{
-			Bomber * bomber = (*it);
+			removeEntityCollision(*it);
 			bombers.erase(it);
-			delete bomber;
 		}
 	}
 }
 
 void AppFactory::destroyBlock(Ogre::String const & pName)
 {
+	for (std::vector<Block*>::iterator it = blocks.begin(); it != blocks.end(); it++)
+	{
+		if (!((*it)->getName().compare(pName)))
+		{
+			removeEntityCollision(*it);
+			int x = ((*it)->getNode()->getPosition().x / 3.2) + .02;
+			int z = ((*it)->getNode()->getPosition().z / 3.2) + .02;
+			mapCollision[z][x] = 0;
+			blocks.erase(it);
+		}
+	}
+}
+
+void AppFactory::destroyBomb(Ogre::String const & pName)
+{
+	for (std::vector<Bomb*>::iterator it = bombs.begin(); it != bombs.end(); it++)
+	{
+		if (!((*it)->getName().compare(pName)))
+		{
+			removeEntityCollision(*it);
+			bombs.erase(it);
+		}
+	}
 }
 
 void AppFactory::destroyAll()
 {
 	//Ground
-	for (std::vector<Ground*>::iterator it = grounds.begin(); it != grounds.end(); it++)
-	{
-		Ground * ground = (*it);
-		grounds.erase(it);
-		delete ground;
-	}
+	grounds.clear();
 
 	//Bomber
-	for (std::vector<Bomber*>::iterator it = bombers.begin(); it != bombers.end(); it++)
-	{
-		Bomber * bomber = (*it);
-		bombers.erase(it);
-		delete bomber;
-	}
+	std::for_each(bombers.begin(), bombers.end(), removeEntityCollision<Bomber*>);
+	bombers.clear();
 
 	//Block
-	for (std::vector<Block*>::iterator it = blocks.begin(); it != blocks.end(); it++)
-	{
-		Block * block = (*it);
-		blocks.erase(it);
-		delete block;
-	}
-
-
+	std::for_each(blocks.begin(), blocks.end(), removeEntityCollision<Block*>);
+	blocks.clear();
+	
+	//Bomb
+	std::for_each(bombs.begin(), bombs.end(), removeEntityCollision<Bomb*>);
+	bombs.clear();
 }
 
 Ground * AppFactory::getGround(Ogre::String const & pName) const
@@ -165,25 +191,44 @@ Block * AppFactory::getBlock(Ogre::String const & pName) const
 	return nullptr;
 }
 
-void * AppFactory::getElement(Ogre::Entity & pEntity) const
+Bomb * AppFactory::getBomb(Ogre::String const & pName) const
+{
+	for (std::vector<Bomb*>::const_iterator it = bombs.begin(); it != bombs.end(); it++)
+	{
+		if (!((*it)->getName().compare(pName)))
+		{
+			return (*it);
+		}
+	}
+	return nullptr;
+}
+
+void * AppFactory::getElement(Ogre::Entity * pEntity) const
 {
 	for (std::vector<Ground*>::const_iterator it = grounds.begin(); it != grounds.end(); it++)
 	{
-		if (!((*it)->getEntity()->getName().compare(pEntity.getName())))
+		if (!((*it)->getEntity()->getName().compare(pEntity->getName())))
 		{
 			return *it;
 		}
 	}
 	for (std::vector<Bomber*>::const_iterator it = bombers.begin(); it != bombers.end(); it++)
 	{
-		if (!((*it)->getEntity()->getName().compare(pEntity.getName())))
+		if (!((*it)->getEntity()->getName().compare(pEntity->getName())))
 		{
 			return *it;
 		}
 	}
 	for (std::vector<Block*>::const_iterator it = blocks.begin(); it != blocks.end(); it++)
 	{
-		if (!((*it)->getEntity()->getName().compare(pEntity.getName())))
+		if (!((*it)->getEntity()->getName().compare(pEntity->getName())))
+		{
+			return *it;
+		}
+	}
+	for (std::vector<Bomb*>::const_iterator it = bombs.begin(); it != bombs.end(); it++)
+	{
+		if (!((*it)->getEntity()->getName().compare(pEntity->getName())))
 		{
 			return *it;
 		}
@@ -234,6 +279,10 @@ void AppFactory::injectMouseReleased(const OIS::MouseEvent & evt, OIS::MouseButt
 void AppFactory::injectUpdate(double timeSinceLastFrame)
 {
 	for (std::vector<Bomber*>::const_iterator it = bombers.begin(); it != bombers.end(); it++)
+	{
+		(*it)->update(timeSinceLastFrame);
+	}
+	for (std::vector<Bomb*>::const_iterator it = bombs.begin(); it != bombs.end(); it++)
 	{
 		(*it)->update(timeSinceLastFrame);
 	}
