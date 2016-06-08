@@ -3,6 +3,20 @@
 AppFactory::AppFactory(Ogre::SceneManager * pSceneMgr): sceneMgr(pSceneMgr)
 {
 	collisionTools = new Collision::CollisionTools();
+	
+	int	i, j;
+	i = 0;
+	while (i < 15)
+	{
+		j = 0;
+		while (j < 15)
+		{
+			mapCollision[i][j] = 0;
+			mapDanger[i][j] = 0;
+			j++;
+		}
+		i++;
+	}
 }
 
 AppFactory::~AppFactory()
@@ -51,6 +65,9 @@ void AppFactory::createBlock(Ogre::String const & pName, Ogre::Vector3 const pPo
 	}
 	blocks.push_back(block);
 	collisionTools->register_entity(block->getEntity());
+	int x = pPosition.x / 3.18;
+	int z = pPosition.z / 3.18;
+	mapCollision[z][x] = 1;
 }
 
 void AppFactory::destroyGround(Ogre::String const & pName)

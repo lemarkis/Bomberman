@@ -11,7 +11,7 @@ Block::~Block()
 StaticBlock::StaticBlock(Ogre::SceneManager * pSceneMgr, Ogre::String const & pName, Ogre::Vector3 const pPosition) : Block(pName)
 {
 	entity = pSceneMgr->createEntity(name, "M_fixe-block.mesh");
-	entity->setCastShadows(true);
+	entity->setCastShadows(false);
 	node = pSceneMgr->getRootSceneNode()->createChildSceneNode(name, pPosition);
 	node->rotate(Ogre::Vector3(0, 1, 0), Ogre::Degree(90), Ogre::Node::TS_LOCAL);
 	node->attachObject(entity);
@@ -40,7 +40,7 @@ Ogre::SceneNode * StaticBlock::getNode() const
 DynamicBlock::DynamicBlock(Ogre::SceneManager * pSceneMgr, Ogre::String const & pName, Ogre::Vector3 const pPosition) : Block(pName)
 {
 	entity = pSceneMgr->createEntity(name, "M_mobile-block.mesh");
-	entity->setCastShadows(true);
+	entity->setCastShadows(false);
 	node = pSceneMgr->getRootSceneNode()->createChildSceneNode(name, pPosition);
 	node->attachObject(entity);
 }

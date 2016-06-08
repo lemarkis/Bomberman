@@ -42,7 +42,7 @@ void SplashScreenState::createScene()
 	material->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
 	material->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
 	material->getTechnique(0)->getPass(0)->setLightingEnabled(false);
-	//creation rect
+	// creation rect
 	Ogre::Rectangle2D *rect = new Ogre::Rectangle2D(true);
 	rect->setCorners(-1.0, 1.0, 1.0, -1.0);
 	rect->setMaterial("SplashScreen");

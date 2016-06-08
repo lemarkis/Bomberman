@@ -55,7 +55,8 @@ protected:
 	std::vector<Block*>			blocks;
 	//std::vector<Bomb*>			bombs;
 
-	//std::vector<Ogre::Entity*>	collisionStack; <-- collision unregisterer? useless?
+	int							mapCollision[15][15];
+	int							mapDanger[15][15];
 };
 
 #endif // !_FACTORY_HPP
