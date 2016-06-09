@@ -30,7 +30,7 @@ Ogre::SceneNode * Bomb::getNode() const
 	return this->node;
 }
 
-void Bomb::update(double timeSinceLastFrame)
+bool Bomb::update(double timeSinceLastFrame)
 {
 	remainingLifeTime -= timeSinceLastFrame;
 	if (remainingLifeTime <= 0)
@@ -46,20 +46,22 @@ void Bomb::update(double timeSinceLastFrame)
 		factory->mapDanger[z][x + 1] = 0;
 		Collision::CollisionTools * tools = factory->getCollisionTools();
 		Collision::SCheckCollisionAnswer result;
+		Ogre::Vector3 from = node->getPosition() + Ogre::Vector3(0, .5, 0);
 		//x
-		result = tools->check_ray_collision(node->getPosition(), node->getPosition() + Ogre::Vector3::UNIT_X, 3.2, .5, 4294967295U, entity, false);
+		result = tools->check_ray_collision(Ogre::Ray(from, Ogre::Vector3::UNIT_X), 0xFFFFFFFF, entity, 4.2, false);
 		_breakItem(result);
 		//-x
-		result = tools->check_ray_collision(node->getPosition(), node->getPosition() + Ogre::Vector3::NEGATIVE_UNIT_X, 3.2, .5, 4294967295U, entity, false);
+		result = tools->check_ray_collision(Ogre::Ray(from, Ogre::Vector3::NEGATIVE_UNIT_X), 0xFFFFFFFF, entity, 4.2, false);
 		_breakItem(result);
 		//z
-		result = tools->check_ray_collision(node->getPosition(), node->getPosition() + Ogre::Vector3::UNIT_Z, 3.2, .5, 4294967295U, entity, false);
+		result = tools->check_ray_collision(Ogre::Ray(from, Ogre::Vector3::UNIT_Z), 0xFFFFFFFF, entity, 4.2, false);
 		_breakItem(result);
 		//-z
-		result = tools->check_ray_collision(node->getPosition(), node->getPosition() + Ogre::Vector3::NEGATIVE_UNIT_Z, 3.2, .5, 4294967295U, entity, false);
+		result = tools->check_ray_collision(Ogre::Ray(from, Ogre::Vector3::NEGATIVE_UNIT_Z), 0xFFFFFFFF, entity, 4.2, false);
 		_breakItem(result);
-		factory->destroyBomb(this->name);
+		return true;
 	}
+	return false;
 }
 
 void Bomb::_breakItem(Collision::SCheckCollisionAnswer result)
@@ -67,7 +69,7 @@ void Bomb::_breakItem(Collision::SCheckCollisionAnswer result)
 	if (result.collided)
 	{
 		Ogre::String name = result.entity->getName();
-		if (name.find("Player") != Ogre::String::npos)
+		if (name.find("Player") != Ogre::String::npos && name.find("Bomb") == Ogre::String::npos)
 		{
 			AppFactory::getSingletonPtr()->destroyBomber(result.entity->getName());
 		}

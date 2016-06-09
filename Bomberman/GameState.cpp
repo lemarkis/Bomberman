@@ -198,6 +198,8 @@ void GameState::createScene()
 	factory->createBlock("StaticI47", Ogre::Vector3(25.58, 0, 38.38), false);
 	factory->createBlock("StaticI48", Ogre::Vector3(31.98, 0, 38.38), false);
 	factory->createBlock("StaticI49", Ogre::Vector3(38.38, 0, 38.38), false);
+	//BBlock
+	generateBBlock();
 	//light
 	Ogre::Light *spotlight = m_pSceneMgr->createLight("Spotlight");
 	spotlight->setDiffuseColour(.7, .7, .7);
@@ -310,8 +312,15 @@ void GameState::update(double timeSinceLastFrame)
         return;
     }
 
-	AppFactory::getSingletonPtr()->injectUpdate(timeSinceLastFrame);
-
+	
+	m_Factory->injectUpdate(timeSinceLastFrame);
+	std::vector<Bomber *> bombers = m_Factory->getBombers();
+	if (bombers.size() ==  1)
+	{
+		Ogre::String name_winner = bombers.back()->getName();
+		name_winner.append(" Winner");
+		OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_CENTER, "Label_endgame", name_winner, 250);
+	}
     m_MoveScale = m_MoveSpeed   * timeSinceLastFrame;
     m_RotScale  = m_RotateSpeed * timeSinceLastFrame;
 
@@ -332,3 +341,54 @@ void GameState::buildGUI()
 }
 
 //|||||||||||||||||||||||||||||||||||||||||||||||
+
+void	GameState::generateBBlock()
+{
+	int	i;
+	int	j = 1;
+	setProtect(true);
+	AppFactory *factory = AppFactory::getSingletonPtr();
+	while (j <= 13)
+	{
+		i = 1;
+		while (i <= 13)
+		{
+			if (factory->mapCollision[j][i] == 0 && (rand() % 100) < 75)
+			{
+				Ogre::String nameBlock = Ogre::String("Break").append(std::to_string(i));
+				nameBlock.append(".").append(std::to_string(j));
+				factory->createBlock(nameBlock, Ogre::Vector3((i * 3.2 - 0.02), 0, (j * 3.2 - 0.02)), true);
+			}
+			++i;
+		}
+		++j;
+	}
+	setProtect(false);
+}
+
+void	GameState::setProtect(bool b)
+{
+	AppFactory *factory = AppFactory::getSingletonPtr();
+	int num = b ? 2 : 0;
+	factory->mapCollision[1][1] = num;
+	factory->mapCollision[2][1] = num;
+	factory->mapCollision[1][2] = num;
+
+	factory->mapCollision[13][1] = num;
+	factory->mapCollision[12][1] = num;
+	factory->mapCollision[13][2] = num;
+
+	factory->mapCollision[1][13] = num;
+	factory->mapCollision[2][13] = num;
+	factory->mapCollision[1][12] = num;
+
+	factory->mapCollision[13][13] = num;
+	factory->mapCollision[12][13] = num;
+	factory->mapCollision[13][12] = num;
+
+	factory->mapCollision[7][7] = num;
+	factory->mapCollision[7][8] = num;
+	factory->mapCollision[8][7] = num;
+	factory->mapCollision[7][6] = num;
+	factory->mapCollision[6][7] = num;
+}

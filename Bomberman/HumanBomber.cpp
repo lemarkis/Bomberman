@@ -10,7 +10,7 @@ HumanBomber::HumanBomber(Ogre::SceneManager * pSceneMgr, Collision::CollisionToo
 	animation = entity->getAnimationState("my_animation");
 	animation->setLoop(true);
 
-	moveSpeed = 12.f;
+	moveSpeed = 10.f;
 }
 
 HumanBomber::~HumanBomber()
@@ -56,6 +56,12 @@ bool HumanBomber::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID i
 void HumanBomber::update(double timeSinceLastFrame)
 {
 	animation->addTime(timeSinceLastFrame / 400);
+
+	elapsedTime += timeSinceLastFrame;
+	if (elapsedTime >= 3000)
+	{
+		remainingBomb += 1;
+	}
 
 	translateVector = Ogre::Vector3::ZERO;
 	lookAtVector = Ogre::Vector3::ZERO;
