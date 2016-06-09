@@ -62,6 +62,9 @@ private:
 	Ogre::Degree				m_RotScale;
 
 	AppFactory*					m_Factory;
+
+	void	setProtect(bool b);
+	void	generateBBlock();
 };
 
 //|||||||||||||||||||||||||||||||||||||||||||||||
