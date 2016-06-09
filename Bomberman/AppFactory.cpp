@@ -287,3 +287,8 @@ void AppFactory::injectUpdate(double timeSinceLastFrame)
 		(*it)->update(timeSinceLastFrame);
 	}
 }
+
+std::vector<Bomber*> AppFactory::getBombers() const
+{
+	 return bombers;
+}

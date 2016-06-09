@@ -312,8 +312,15 @@ void GameState::update(double timeSinceLastFrame)
         return;
     }
 
-	AppFactory::getSingletonPtr()->injectUpdate(timeSinceLastFrame);
-
+	
+	m_Factory->injectUpdate(timeSinceLastFrame);
+	std::vector<Bomber *> bombers = m_Factory->getBombers();
+	if (bombers.size() ==  1)
+	{
+		Ogre::String name_winner = bombers.back()->getName();
+		name_winner.append(" Winner");
+		OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_CENTER, "Label_endgame", name_winner, 250);
+	}
     m_MoveScale = m_MoveSpeed   * timeSinceLastFrame;
     m_RotScale  = m_RotateSpeed * timeSinceLastFrame;
 
