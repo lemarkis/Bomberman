@@ -54,14 +54,14 @@ void AppFactory::createBomber(Ogre::String const & pName, Ogre::Vector3 const pP
 	Ogre::String str = Ogre::String("Creating bomber ").append(pName);
 	OgreFramework::getSingletonPtr()->m_pLog->logMessage(str);
 	Bomber * bomber;
-	/* if (pIA)
+	if (pIA)
 	{
-		bomber = new IABomber(sceneMgr, pName, pPosition);
+		bomber = new IaBomber(sceneMgr, collisionTools, pName, pPosition);
 	}
 	else
-	{*/
+	{
 		bomber = new HumanBomber(sceneMgr, collisionTools, pName, pPosition);
-	//}
+	}
 	bombers.push_back(bomber);
 	collisionTools->register_entity(bomber->getEntity(), Collision::COLLISION_BOX);
 }

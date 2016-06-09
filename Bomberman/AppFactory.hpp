@@ -10,6 +10,7 @@
 #include "Bomb.hpp"
 #include "Bomber.hpp"
 #include "HumanBomber.hpp"
+#include "IaBomber.hpp"
 #include "Block.hpp"
 
 class AppFactory : public Ogre::Singleton<AppFactory>

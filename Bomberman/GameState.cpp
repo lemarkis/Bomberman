@@ -99,7 +99,7 @@ void GameState::createScene()
 	factory->createGround("Plaque15", Ogre::Vector3(41.58, 0, 28.78));
 	factory->createGround("Plaque16", Ogre::Vector3(41.58, 0, 41.58));
 	//player
-	factory->createBomber("Player1", Ogre::Vector3(22.38, 0, 22.38), false);
+	factory->createBomber("Player1", Ogre::Vector3(22.38, 0, 22.38), true);
 	//haut
 	factory->createBlock("Static1", Ogre::Vector3(0, 0, 0), false);
 	factory->createBlock("Static2", Ogre::Vector3(3.18, 0, 0), false);
