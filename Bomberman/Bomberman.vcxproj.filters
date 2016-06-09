@@ -115,7 +115,4 @@
       <UniqueIdentifier>{d8b2bef9-5b7c-4a7d-a006-1f5fa87b8a94}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\bin\x86-Debug\resources.cfg" />
-  </ItemGroup>
 </Project>
