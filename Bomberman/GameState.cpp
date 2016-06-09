@@ -338,23 +338,23 @@ void GameState::buildGUI()
 void	GameState::generateBBlock()
 {
 	int	i;
-	int	j = 0;
+	int	j = 1;
 	setProtect(true);
 	AppFactory *factory = AppFactory::getSingletonPtr();
-	while (j < 15)
+	while (j <= 13)
 	{
-		i = 0;
-		while (i < 15)
+		i = 1;
+		while (i <= 13)
 		{
-			bool MyRand = (rand() % 100) < 75;
-			if (factory->mapCollision == 0 && MyRand < 75)
+			if (factory->mapCollision[j][i] == 0 && (rand() % 100) < 75)
 			{
-				Ogre::String nameBlock = Ogre::String("Break").append(std::to_string(i)).append(std::to_string(j));
-				factory->createBlock(nameBlock, Ogre::Vector3((i * 32 - 0.2), 0, (j * 32 - 0.2)), true);
+				Ogre::String nameBlock = Ogre::String("Break").append(std::to_string(i));
+				nameBlock.append(".").append(std::to_string(j));
+				factory->createBlock(nameBlock, Ogre::Vector3((i * 3.2 - 0.02), 0, (j * 3.2 - 0.02)), true);
 			}
-			i++;
+			++i;
 		}
-		j++;
+		++j;
 	}
 	setProtect(false);
 }

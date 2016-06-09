@@ -129,10 +129,10 @@ void AppFactory::destroyBlock(Ogre::String const & pName)
 		if (!((*it)->getName().compare(pName)))
 		{
 			removeEntityCollision(*it);
-			destroyNode(*it);
 			int x = ((*it)->getNode()->getPosition().x / 3.2) + .02;
 			int z = ((*it)->getNode()->getPosition().z / 3.2) + .02;
 			mapCollision[z][x] = 0;
+			destroyNode(*it);
 			blocks.erase(it);
 			return;
 		}

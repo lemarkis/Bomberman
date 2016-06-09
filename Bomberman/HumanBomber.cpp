@@ -10,7 +10,7 @@ HumanBomber::HumanBomber(Ogre::SceneManager * pSceneMgr, Collision::CollisionToo
 	animation = entity->getAnimationState("my_animation");
 	animation->setLoop(true);
 
-	moveSpeed = 12.f;
+	moveSpeed = 10.f;
 }
 
 HumanBomber::~HumanBomber()
