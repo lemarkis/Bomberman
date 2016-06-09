@@ -21,8 +21,7 @@ void GameState::enter()
     m_pSceneMgr = OgreFramework::getSingletonPtr()->m_pRoot->createSceneManager(Ogre::ST_GENERIC, "GameSceneMgr");
     m_pSceneMgr->setAmbientLight(Ogre::ColourValue(0.7f, 0.7f, 0.7f));
 
-	new AppFactory(m_pSceneMgr);
-
+	m_Factory = new AppFactory(m_pSceneMgr);
     m_pSceneMgr->addRenderQueueListener(OgreFramework::getSingletonPtr()->m_pOverlaySystem);
 
     m_pCamera = m_pSceneMgr->createCamera("GameCamera");
@@ -199,7 +198,7 @@ void GameState::createScene()
 	factory->createBlock("StaticI48", Ogre::Vector3(31.98, 0, 38.38), false);
 	factory->createBlock("StaticI49", Ogre::Vector3(38.38, 0, 38.38), false);
 	//BBlock
-	generateBBlock();
+	//generateBBlock();
 	//light
 	Ogre::Light *spotlight = m_pSceneMgr->createLight("Spotlight");
 	spotlight->setDiffuseColour(.7, .7, .7);
@@ -306,21 +305,24 @@ void GameState::update(double timeSinceLastFrame)
     m_FrameEvent.timeSinceLastFrame = timeSinceLastFrame;
     OgreFramework::getSingletonPtr()->m_pTrayMgr->frameRenderingQueued(m_FrameEvent);
 
+	m_Factory->injectUpdate(timeSinceLastFrame);
+
+	std::vector<Bomber *> bombers = m_Factory->getBombers();
+	if (bombers.size() == 1)
+	{
+		Ogre::String name_winner = bombers.back()->getName();
+		name_winner.append(" Winner");
+		OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_CENTER, "Label_endgame", name_winner, 500);
+		Sleep(10000);
+		m_bQuit = true;
+	}
+
     if(m_bQuit == true)
     {
         popAppState();
         return;
     }
 
-	
-	m_Factory->injectUpdate(timeSinceLastFrame);
-	std::vector<Bomber *> bombers = m_Factory->getBombers();
-	if (bombers.size() ==  1)
-	{
-		Ogre::String name_winner = bombers.back()->getName();
-		name_winner.append(" Winner");
-		OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_CENTER, "Label_endgame", name_winner, 250);
-	}
     m_MoveScale = m_MoveSpeed   * timeSinceLastFrame;
     m_RotScale  = m_RotateSpeed * timeSinceLastFrame;
 
