@@ -198,6 +198,8 @@ void GameState::createScene()
 	factory->createBlock("StaticI47", Ogre::Vector3(25.58, 0, 38.38), false);
 	factory->createBlock("StaticI48", Ogre::Vector3(31.98, 0, 38.38), false);
 	factory->createBlock("StaticI49", Ogre::Vector3(38.38, 0, 38.38), false);
+	//BBlock
+	generateBBlock();
 	//light
 	Ogre::Light *spotlight = m_pSceneMgr->createLight("Spotlight");
 	spotlight->setDiffuseColour(.7, .7, .7);
@@ -332,3 +334,54 @@ void GameState::buildGUI()
 }
 
 //|||||||||||||||||||||||||||||||||||||||||||||||
+
+void	GameState::generateBBlock()
+{
+	int	i;
+	int	j = 0;
+	setProtect(true);
+	AppFactory *factory = AppFactory::getSingletonPtr();
+	while (j < 15)
+	{
+		i = 0;
+		while (i < 15)
+		{
+			bool MyRand = (rand() % 100) < 75;
+			if (factory->mapCollision == 0 && MyRand < 75)
+			{
+				Ogre::String nameBlock = Ogre::String("Break").append(std::to_string(i)).append(std::to_string(j));
+				factory->createBlock(nameBlock, Ogre::Vector3((i * 32 - 0.2), 0, (j * 32 - 0.2)), true);
+			}
+			i++;
+		}
+		j++;
+	}
+	setProtect(false);
+}
+
+void	GameState::setProtect(bool b)
+{
+	AppFactory *factory = AppFactory::getSingletonPtr();
+	int num = b ? 2 : 0;
+	factory->mapCollision[1][1] = num;
+	factory->mapCollision[2][1] = num;
+	factory->mapCollision[1][2] = num;
+
+	factory->mapCollision[13][1] = num;
+	factory->mapCollision[12][1] = num;
+	factory->mapCollision[13][2] = num;
+
+	factory->mapCollision[1][13] = num;
+	factory->mapCollision[2][13] = num;
+	factory->mapCollision[1][12] = num;
+
+	factory->mapCollision[13][13] = num;
+	factory->mapCollision[12][13] = num;
+	factory->mapCollision[13][12] = num;
+
+	factory->mapCollision[7][7] = num;
+	factory->mapCollision[7][8] = num;
+	factory->mapCollision[8][7] = num;
+	factory->mapCollision[7][6] = num;
+	factory->mapCollision[6][7] = num;
+}
