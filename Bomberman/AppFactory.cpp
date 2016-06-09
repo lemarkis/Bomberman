@@ -318,3 +318,8 @@ void AppFactory::injectUpdate(double timeSinceLastFrame)
 		toErase.erase(toErase.end() - 1);
 	}
 }
+
+std::vector<Bomber*> AppFactory::getBombers() const
+{
+	 return bombers;
+}

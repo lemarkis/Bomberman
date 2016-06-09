@@ -48,7 +48,9 @@ public:
 
 	int		mapCollision[15][15];
 	int		mapDanger[15][15];
-	Collision::CollisionTools	*getCollisionTools() { return collisionTools; }
+	Collision::CollisionTools	*getCollisionTools() const { return collisionTools; }
+	std::vector<Bomber*>	getBombers() const;
+
 
 private:
 
