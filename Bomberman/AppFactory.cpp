@@ -8,6 +8,14 @@ static void removeEntityCollision(T pElement)
 	AppFactory::getSingletonPtr()->getCollisionTools()->remove_entity(pElement->getEntity());
 }
 
+template<typename T>
+void destroyNode(T pElement)
+{
+	Ogre::SceneManager * sceneMgr = OgreFramework::getSingletonPtr()->m_pRoot->getSceneManager("GameSceneMgr");
+	sceneMgr->destroyEntity(pElement->getEntity());
+	sceneMgr->destroySceneNode(pElement->getNode());
+}
+
 AppFactory::AppFactory(Ogre::SceneManager * pSceneMgr): sceneMgr(pSceneMgr)
 {
 	collisionTools = new Collision::CollisionTools();
@@ -55,7 +63,7 @@ void AppFactory::createBomber(Ogre::String const & pName, Ogre::Vector3 const pP
 		bomber = new HumanBomber(sceneMgr, collisionTools, pName, pPosition);
 	//}
 	bombers.push_back(bomber);
-	collisionTools->register_entity(bomber->getEntity());
+	collisionTools->register_entity(bomber->getEntity(), Collision::COLLISION_BOX);
 }
 
 void AppFactory::createBlock(Ogre::String const & pName, Ogre::Vector3 const pPosition, bool pBreakable)
@@ -72,7 +80,7 @@ void AppFactory::createBlock(Ogre::String const & pName, Ogre::Vector3 const pPo
 		block = new StaticBlock(sceneMgr, pName, pPosition);
 	}
 	blocks.push_back(block);
-	collisionTools->register_entity(block->getEntity());
+	collisionTools->register_static_entity(block->getEntity(), block->getNode()->getPosition(), block->getNode()->getOrientation(), block->getNode()->getScale(), Collision::COLLISION_BOX);
 	int x = (pPosition.x / 3.2) + .02;
 	int z = (pPosition.z / 3.2) + .02;
 	mapCollision[z][x] = 1;
@@ -93,7 +101,9 @@ void AppFactory::destroyGround(Ogre::String const & pName)
 	{
 		if (!((*it)->getName().compare(pName)))
 		{
+			destroyNode(*it);
 			grounds.erase(it);
+			return;
 		}
 	}
 }
@@ -105,7 +115,9 @@ void AppFactory::destroyBomber(Ogre::String const & pName)
 		if (!((*it)->getName().compare(pName)))
 		{
 			removeEntityCollision(*it);
+			destroyNode(*it);
 			bombers.erase(it);
+			return;
 		}
 	}
 }
@@ -117,10 +129,12 @@ void AppFactory::destroyBlock(Ogre::String const & pName)
 		if (!((*it)->getName().compare(pName)))
 		{
 			removeEntityCollision(*it);
+			destroyNode(*it);
 			int x = ((*it)->getNode()->getPosition().x / 3.2) + .02;
 			int z = ((*it)->getNode()->getPosition().z / 3.2) + .02;
 			mapCollision[z][x] = 0;
 			blocks.erase(it);
+			return;
 		}
 	}
 }
@@ -132,7 +146,9 @@ void AppFactory::destroyBomb(Ogre::String const & pName)
 		if (!((*it)->getName().compare(pName)))
 		{
 			removeEntityCollision(*it);
+			destroyNode(*it);
 			bombs.erase(it);
+			return;
 		}
 	}
 }
@@ -140,18 +156,22 @@ void AppFactory::destroyBomb(Ogre::String const & pName)
 void AppFactory::destroyAll()
 {
 	//Ground
+	//std::for_each(grounds.begin(), grounds.end(), destroyNode<Ground*>);
 	grounds.clear();
 
 	//Bomber
 	std::for_each(bombers.begin(), bombers.end(), removeEntityCollision<Bomber*>);
+	//std::for_each(bombers.begin(), bombers.end(), destroyNode<Bomber*>);
 	bombers.clear();
 
 	//Block
 	std::for_each(blocks.begin(), blocks.end(), removeEntityCollision<Block*>);
+	//std::for_each(blocks.begin(), blocks.end(), destroyNode<Block*>);
 	blocks.clear();
 	
 	//Bomb
 	std::for_each(bombs.begin(), bombs.end(), removeEntityCollision<Bomb*>);
+	//std::for_each(bombs.begin(), bombs.end(), destroyNode<Bomb*>);
 	bombs.clear();
 }
 
@@ -278,13 +298,24 @@ void AppFactory::injectMouseReleased(const OIS::MouseEvent & evt, OIS::MouseButt
 
 void AppFactory::injectUpdate(double timeSinceLastFrame)
 {
-	for (std::vector<Bomber*>::const_iterator it = bombers.begin(); it != bombers.end(); it++)
+	std::vector<Bomb*> toErase;
+
+	for (std::vector<Bomber*>::const_iterator it = bombers.begin(); it != bombers.end(); ++it)
 	{
 		(*it)->update(timeSinceLastFrame);
 	}
-	for (std::vector<Bomb*>::const_iterator it = bombs.begin(); it != bombs.end(); it++)
+	for (std::vector<Bomb*>::const_iterator it = bombs.begin(); it != bombs.end(); ++it)
 	{
-		(*it)->update(timeSinceLastFrame);
+		if ((*it)->update(timeSinceLastFrame))
+		{
+			toErase.push_back(*it);
+		}
+	}
+
+	while (!toErase.empty())
+	{
+		AppFactory::getSingletonPtr()->destroyBomb(toErase.back()->getName());
+		toErase.erase(toErase.end() - 1);
 	}
 }
 

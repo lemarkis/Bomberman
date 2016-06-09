@@ -31,11 +31,12 @@ public:
 private:
 
 protected:
-	Ogre::String const &		name;
+	Ogre::String const			name;
 	Ogre::Entity*				entity;
 	Ogre::SceneNode*			node;
 	Ogre::AnimationState*		animation;
 	int							remainingBomb;
+	double						elapsedTime;
 
 	Collision::CollisionTools * collisionTools;
 };

@@ -357,9 +357,6 @@ echo Zip=$(OGRE_HOME)\Media\packs\SdkTrays.zip&gt;&gt;%resourcescfg%
     <ResourceCompile Include="Bomberman.rc" />
     <Image Include="Bomberman.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\bin\x86-Debug\resources.cfg" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -15,12 +15,12 @@ public:
 	Ogre::Entity * getEntity() const;
 	Ogre::SceneNode * getNode() const;
 
-	void update(double timeSinceLastFrame);
+	bool update(double timeSinceLastFrame);
 private:
 	void _breakItem(Collision::SCheckCollisionAnswer result);
 
 protected:
-	Ogre::String const &	name;
+	Ogre::String const		name;
 	Ogre::Entity *			entity;
 	Ogre::SceneNode *		node;
 	double					remainingLifeTime;

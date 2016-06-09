@@ -57,6 +57,12 @@ void HumanBomber::update(double timeSinceLastFrame)
 {
 	animation->addTime(timeSinceLastFrame / 400);
 
+	elapsedTime += timeSinceLastFrame;
+	if (elapsedTime >= 3000)
+	{
+		remainingBomb += 1;
+	}
+
 	translateVector = Ogre::Vector3::ZERO;
 	lookAtVector = Ogre::Vector3::ZERO;
 
