@@ -124,6 +124,8 @@ void IaBomber::update(double timeSinceLastFrame)
 	}
 	if (compareDouble(x, xGoal) && compareDouble(z, zGoal))
 	{
+		tabCopy(AppFactory::getSingletonPtr()->mapCollision);
+		tabFill(0);
 		setNewGoal(x, z);
 		animation->setEnabled(false);
 	}
@@ -152,35 +154,129 @@ void IaBomber::move()
 
 void IaBomber::setNewGoal(double x, double z)
 {
-	if (isADangerousZone(x, z))
-	{
+	OgreFramework::getSingletonPtr()->m_pLog->logMessage("Finding New Goal...");
+	//if (isADangerousZone(x, z))
+	//{
 		setNewDefensiveGoal(x, z);
-	}
+	/*}
 	else
 	{
 		setNewOffensiveGoal(x, z);
-	}
+	}*/
 }
 
 bool IaBomber::isADangerousZone(double x, double z)
 {
 	int a = x * 3.2 - .02;
 	int b = z * 3.2 - .02;
-	return (AppFactory::getSingletonPtr()->mapDanger[b][a] != 0);
+	int d = AppFactory::getSingletonPtr()->mapDanger[b][a];
+	return (d != 0);
 }
 
 void IaBomber::setNewDefensiveGoal(double x, double z)
 {
+	OgreFramework::getSingletonPtr()->m_pLog->logMessage("...Defensive Goal");
+	int a = x / 3.2 - .02 + 1;
+	int b = z / 3.2 - .02 + 1;
+	int d = 1;
+	path[b][a] = 0;
+	path[b][a + 1] = !path[b][a + 1] ? 1 : path[b][a + 1];
+	path[b][a - 1] = !path[b][a - 1] ? 1 : path[b][a - 1];
+	path[b + 1][a] = !path[b + 1][a] ? 1 : path[b + 1][a];
+	path[b - 1][a] = !path[b - 1][a] ? 1 : path[b - 1][a];
+	direction[b][a + 1] = 1;
+	direction[b + 1][a] = 2;
+	direction[b][a - 1] = 3;
+	direction[b - 1][a] = 4;
+
+	while (true)
+	{
+		for (int j = 0; j < 16; ++j)
+		{
+			for (int i = 0; i < 16; ++i)
+			{
+				if (path[j][i] == d)
+				{
+					if (AppFactory::getSingletonPtr()->mapDanger[j][i] == 0)
+					{
+						if (direction[j][i] == 1)
+						{
+							xGoal += 3.18;
+						}
+						if (direction[j][i] == 2)
+						{
+							zGoal += 3.18;
+						}
+						if (direction[j][i] == 3)
+						{
+							xGoal -= 3.18;
+						}
+						if (direction[j][i] == 4)
+						{
+							zGoal -= 3.18;
+						}
+						return;
+					}
+					if (!path[j][i + 1])
+					{
+						direction[j][i + 1] = direction[j][i];
+						path[j][i + 1] = d + 1;
+					}
+					if (!path[j][i - 1])
+					{
+						direction[j][i - 1] = direction[j][i];
+						path[j][i - 1] = d + 1;
+					}
+					if (!path[j + 1][i])
+					{
+						direction[j + 1][i] = direction[j][i];
+						path[j + 1][i] = d + 1;
+					}
+					if (!path[j - 1][i])
+					{
+						direction[j - 1][i] = direction[j][i];
+						path[j - 1][i] = d + 1;
+					}
+				}
+			}
+		}
+		++d;
+	}
 }
 
 void IaBomber::setNewOffensiveGoal(double x, double z)
 {
+	OgreFramework::getSingletonPtr()->m_pLog->logMessage("...Offensive Goal");
 }
 
 void IaBomber::tabFill(int value)
 {
+	int i, j;
+	j = 0;
+	while (j < 16)
+	{
+		i = 0;
+		while (i < 16)
+		{
+			direction[j][i] = value;
+			++i;
+		}
+		++j;
+	}
 }
 
-void IaBomber::tabCopy(int ** tab)
+void IaBomber::tabCopy(int tab[15][15])
 {
+	int i, j;
+	j = 0;
+	while (j < 16)
+	{
+		i = 0;
+		while (i < 16)
+		{
+			path[j][i] = tab[j][i] ? tab[j][i] + 99 : tab[j][i];
+			++i;
+		}
+		++j;
+	}
 }

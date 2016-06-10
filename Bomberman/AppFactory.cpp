@@ -70,20 +70,21 @@ void AppFactory::createBlock(Ogre::String const & pName, Ogre::Vector3 const pPo
 {
 	Ogre::String str = Ogre::String("Creating block ").append(pName);
 	OgreFramework::getSingletonPtr()->m_pLog->logMessage(str);
-	Block * block; 
+	Block * block;
+	int x = (pPosition.x / 3.2) + .02;
+	int z = (pPosition.z / 3.2) + .02;
 	if (pBreakable)
 	{
 		block = new DynamicBlock(sceneMgr, pName, pPosition);
+		mapCollision[z][x] = 2;
 	}
 	else
 	{
 		block = new StaticBlock(sceneMgr, pName, pPosition);
+		mapCollision[z][x] = 1;
 	}
 	blocks.push_back(block);
 	collisionTools->register_static_entity(block->getEntity(), block->getNode()->getPosition(), block->getNode()->getOrientation(), block->getNode()->getScale(), Collision::COLLISION_BOX);
-	int x = (pPosition.x / 3.2) + .02;
-	int z = (pPosition.z / 3.2) + .02;
-	mapCollision[z][x] = 1;
 }
 
 void AppFactory::createBomb(Ogre::String const & pName, Ogre::Vector3 const pPosition)
@@ -131,7 +132,7 @@ void AppFactory::destroyBlock(Ogre::String const & pName)
 			removeEntityCollision(*it);
 			int x = ((*it)->getNode()->getPosition().x / 3.2) + .02;
 			int z = ((*it)->getNode()->getPosition().z / 3.2) + .02;
-			mapCollision[z][x] = 0;
+			mapCollision[z][x] = mapCollision[z][x] == 2 ? 0 : mapCollision[z][x];
 			destroyNode(*it);
 			blocks.erase(it);
 			return;

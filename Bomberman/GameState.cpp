@@ -74,7 +74,7 @@ void GameState::exit()
     if(m_pSceneMgr)
         OgreFramework::getSingletonPtr()->m_pRoot->destroySceneManager(m_pSceneMgr);
 
-	delete AppFactory::getSingletonPtr();
+	delete m_Factory;
 }
 
 //|||||||||||||||||||||||||||||||||||||||||||||||

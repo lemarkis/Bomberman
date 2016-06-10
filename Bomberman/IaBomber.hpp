@@ -30,7 +30,7 @@ private:
 	void setNewOffensiveGoal(double x, double z);
 
 	void tabFill(int value);
-	void tabCopy(int ** tab);
+	void tabCopy(int tab[15][15]);
 
 protected:
 	Ogre::Real		moveSpeed;
