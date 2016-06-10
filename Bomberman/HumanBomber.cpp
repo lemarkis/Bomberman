@@ -77,7 +77,7 @@ void HumanBomber::getUnbufferedInput(double timeSinceLastFrame)
 	{
 		if (!checkCollision(OIS::KC_LEFT))
 		{
-			translateVector.x = -(moveSpeed * timeSinceLastFrame / 1000);
+			translateVector.x = -std::min((moveSpeed * timeSinceLastFrame / 1000), 3.18);
 		}
 		lookAtVector.x = -1;
 		animation->setEnabled(true);
@@ -87,7 +87,7 @@ void HumanBomber::getUnbufferedInput(double timeSinceLastFrame)
 	{
 		if (!checkCollision(OIS::KC_RIGHT))
 		{
-			translateVector.x = (moveSpeed * timeSinceLastFrame / 1000);
+			translateVector.x = std::min((moveSpeed * timeSinceLastFrame / 1000), 3.18);
 		}
 		lookAtVector.x = 1;
 		animation->setEnabled(true);
@@ -97,7 +97,7 @@ void HumanBomber::getUnbufferedInput(double timeSinceLastFrame)
 	{
 		if (!checkCollision(OIS::KC_UP))
 		{
-			translateVector.z = -(moveSpeed * timeSinceLastFrame / 1000);
+			translateVector.z = -std::min((moveSpeed * timeSinceLastFrame / 1000), 3.18);
 		}
 		lookAtVector.z = -1;
 		animation->setEnabled(true);
@@ -107,7 +107,7 @@ void HumanBomber::getUnbufferedInput(double timeSinceLastFrame)
 	{
 		if (!checkCollision(OIS::KC_DOWN))
 		{
-			translateVector.z = (moveSpeed * timeSinceLastFrame / 1000);
+			translateVector.z = std::min((moveSpeed * timeSinceLastFrame / 1000), 3.18);
 		}
 		lookAtVector.z = 1;
 		animation->setEnabled(true);

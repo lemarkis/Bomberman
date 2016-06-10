@@ -28,6 +28,7 @@ public:
 
 	bool checkCollision(OIS::KeyCode dir);
 	void dropBomb();
+	bool compareDouble(double a, double b);
 private:
 
 protected:

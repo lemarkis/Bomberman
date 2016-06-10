@@ -29,7 +29,26 @@ Ogre::SceneNode * Bomber::getNode() const
 bool Bomber::checkCollision(OIS::KeyCode dir)
 {
 	bool collided = false;
-	Ogre::Vector3 from = node->getPosition() + Ogre::Vector3(0, .5, 0);
+	Ogre::Vector3 from = node->getPosition();
+	if (dir == OIS::KC_UP || dir == OIS::KC_DOWN)
+	{
+		if (collisionTools->check_ray_collision(Ogre::Ray(from, Ogre::Vector3::UNIT_Y), 0xFFFFFFFF, entity, 5).collided ||
+			collisionTools->check_ray_collision(Ogre::Ray(from + Ogre::Vector3(.8, 0, 0), Ogre::Vector3::UNIT_Y), 0xFFFFFFFF, entity, 5).collided ||
+			collisionTools->check_ray_collision(Ogre::Ray(from + Ogre::Vector3(-.8, 0, 0), Ogre::Vector3::UNIT_Y), 0xFFFFFFFF, entity, 5).collided)
+		{
+			return false;
+		}
+	}
+	if (dir == OIS::KC_RIGHT || dir == OIS::KC_LEFT)
+	{
+		if (collisionTools->check_ray_collision(Ogre::Ray(from, Ogre::Vector3::UNIT_Y), 0xFFFFFFFF, entity, 5).collided ||
+			collisionTools->check_ray_collision(Ogre::Ray(from + Ogre::Vector3(0, 0, .8), Ogre::Vector3::UNIT_Y), 0xFFFFFFFF, entity, 5).collided ||
+			collisionTools->check_ray_collision(Ogre::Ray(from + Ogre::Vector3(0, 0, -.8), Ogre::Vector3::UNIT_Y), 0xFFFFFFFF, entity, 5).collided)
+		{
+			return false;
+		}
+	}
+	from += Ogre::Vector3(0, .5, 0);
 	switch (dir)
 	{
 	case OIS::KC_UP:
@@ -77,4 +96,10 @@ void Bomber::dropBomb()
 		(factory->mapDanger)[z][x + 1] = 1;
 		remainingBomb -= 1;
 	}
+}
+
+bool Bomber::compareDouble(double a, double b)
+{
+	double diff = a - b;
+	return (diff < 0.00005) && (-diff < 0.00005);
 }

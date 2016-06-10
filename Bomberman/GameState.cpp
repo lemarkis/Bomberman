@@ -21,6 +21,8 @@ void GameState::enter()
     m_pSceneMgr = OgreFramework::getSingletonPtr()->m_pRoot->createSceneManager(Ogre::ST_GENERIC, "GameSceneMgr");
     m_pSceneMgr->setAmbientLight(Ogre::ColourValue(0.7f, 0.7f, 0.7f));
 
+	loadFictiveEntity();
+
 	m_Factory = new AppFactory(m_pSceneMgr);
     m_pSceneMgr->addRenderQueueListener(OgreFramework::getSingletonPtr()->m_pOverlaySystem);
 
@@ -34,6 +36,7 @@ void GameState::enter()
 
     OgreFramework::getSingletonPtr()->m_pViewport->setCamera(m_pCamera);
 
+	elapsedTime = 0;
     buildGUI();
 
     createScene();
@@ -99,7 +102,8 @@ void GameState::createScene()
 	factory->createGround("Plaque15", Ogre::Vector3(41.58, 0, 28.78));
 	factory->createGround("Plaque16", Ogre::Vector3(41.58, 0, 41.58));
 	//player
-	factory->createBomber("Player1", Ogre::Vector3(22.38, 0, 22.38), true);
+	factory->createBomber("Player1", Ogre::Vector3(3.8, 0, 3.18), false);
+	factory->createBomber("Player2", Ogre::Vector3(22.38, 0, 22.38), true);
 	//haut
 	factory->createBlock("Static1", Ogre::Vector3(0, 0, 0), false);
 	factory->createBlock("Static2", Ogre::Vector3(3.18, 0, 0), false);
@@ -198,7 +202,7 @@ void GameState::createScene()
 	factory->createBlock("StaticI48", Ogre::Vector3(31.98, 0, 38.38), false);
 	factory->createBlock("StaticI49", Ogre::Vector3(38.38, 0, 38.38), false);
 	//BBlock
-	//generateBBlock();
+	generateBBlock();
 	//light
 	Ogre::Light *spotlight = m_pSceneMgr->createLight("Spotlight");
 	spotlight->setDiffuseColour(.7, .7, .7);
@@ -305,17 +309,25 @@ void GameState::update(double timeSinceLastFrame)
     m_FrameEvent.timeSinceLastFrame = timeSinceLastFrame;
     OgreFramework::getSingletonPtr()->m_pTrayMgr->frameRenderingQueued(m_FrameEvent);
 
-	m_Factory->injectUpdate(timeSinceLastFrame);
-
 	std::vector<Bomber *> bombers = m_Factory->getBombers();
 	if (bombers.size() == 1)
 	{
-		Ogre::String name_winner = bombers.back()->getName();
-		name_winner.append(" Winner");
-		OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_CENTER, "Label_endgame", name_winner, 500);
-		Sleep(10000);
-		m_bQuit = true;
+		elapsedTime += timeSinceLastFrame;
+		if (elapsedTime == 0)
+		{
+			Ogre::String name_winner = bombers.back()->getName();
+			name_winner.append(" Win !!");
+			OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_CENTER, "EndLbl", name_winner, 250);
+			pause();
+		}
+		else // if (elapsedTime > 10000)
+		{
+			changeAppState(findByName("MenuState"));
+			return;
+		}
 	}
+
+	m_Factory->injectUpdate(timeSinceLastFrame);
 
     if(m_bQuit == true)
     {
@@ -338,7 +350,6 @@ void GameState::buildGUI()
 {
     OgreFramework::getSingletonPtr()->m_pTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
     OgreFramework::getSingletonPtr()->m_pTrayMgr->showLogo(OgreBites::TL_BOTTOMRIGHT);
-    //OgreFramework::getSingletonPtr()->m_pTrayMgr->createLabel(OgreBites::TL_TOP, "GameLbl", "Game mode", 250);
     OgreFramework::getSingletonPtr()->m_pTrayMgr->hideCursor();
 }
 
@@ -366,6 +377,15 @@ void	GameState::generateBBlock()
 		++j;
 	}
 	setProtect(false);
+}
+
+void	GameState::loadFictiveEntity()
+{
+	fictBBlock = m_pSceneMgr->createEntity("M_mobile-block.mesh");
+	fictSBlock = m_pSceneMgr->createEntity("M_fixe-block.mesh");
+	fictGround = m_pSceneMgr->createEntity("Plaque.mesh");
+	fictBomb = m_pSceneMgr->createEntity("Sphere.mesh");
+	fictPlayer = m_pSceneMgr->createEntity("Lego_perso.mesh");
 }
 
 void	GameState::setProtect(bool b)

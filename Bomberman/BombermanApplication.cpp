@@ -32,5 +32,5 @@ void BombermanApplication::startApp()
 	PauseState::create(m_pAppStateManager, "PauseState");
 	SplashScreenState::create(m_pAppStateManager, "SplashScreenState");
 
-	m_pAppStateManager->start(m_pAppStateManager->findByName("GameState"));
+	m_pAppStateManager->start(m_pAppStateManager->findByName("SplashScreenState"));
 }

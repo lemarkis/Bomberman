@@ -2,6 +2,7 @@
 #ifndef _HUMANBOMBER_HPP
 #define _HUMANBOMBER_HPP
 
+#include <algorithm>
 #include "Bomber.hpp"
 
 class HumanBomber : public Bomber

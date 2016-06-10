@@ -60,11 +60,22 @@ private:
 	Ogre::Degree				m_RotateSpeed;
 	float						m_MoveScale;
 	Ogre::Degree				m_RotScale;
+	double						elapsedTime;
 
 	AppFactory*					m_Factory;
 
+	Ogre::Entity * fictBBlock;
+	Ogre::Entity * fictSBlock;
+	Ogre::Entity * fictPlayer;
+	Ogre::Entity * fictIA;
+	Ogre::Entity * fictGround;
+	Ogre::Entity * fictBomb;
+
+	OgreBites::Label * endLbl;
+
 	void	setProtect(bool b);
 	void	generateBBlock();
+	void	loadFictiveEntity();
 };
 
 //|||||||||||||||||||||||||||||||||||||||||||||||

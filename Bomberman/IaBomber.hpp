@@ -2,6 +2,7 @@
 #ifndef _IABOMBER_HPP
 #define _IABOMBER_HPP
 
+#include <algorithm>
 #include "Bomber.hpp"
 #include "AppFactory.hpp"
 
@@ -23,19 +24,25 @@ public:
 private:
 	void getUnbufferedInput(double timeSinceLastFrame, Ogre::Vector3 goal, Ogre::Vector3 position);
 	void move();
-	void set_new_goal(int x_goal, int z_goal, int x_pos, int z_pos);
-	bool is_a_dangerous_zone(int x_pos, int z_pos);
-	void set_new_goal_offense(short &xg, short &zg, short x, short z);
-	void set_new_goal_defense();
-	bool not_dangerous(int x, int z, char xg, char zg);
-	bool not_a_solid_block(int x, int z, char xg, char zg);
-	void try_to_put_bomb();
+	void setNewGoal(double x, double z);
+	bool isADangerousZone(double x, double z);
+	void setNewDefensiveGoal(double x, double z);
+	void setNewOffensiveGoal(double x, double z);
+
+	void tabFill(int value);
+	void tabCopy(int ** tab);
 
 protected:
 	Ogre::Real		moveSpeed;
 
 	Ogre::Vector3	translateVector;
 	Ogre::Vector3	lookAtVector;
+
+	double			xGoal;
+	double			zGoal;
+
+	int				path[15][15];
+	int				direction[15][15];
 };
 
 #endif /* !_IABOMBER_HPP */
