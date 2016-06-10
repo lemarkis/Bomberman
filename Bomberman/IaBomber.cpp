@@ -155,14 +155,30 @@ void IaBomber::move()
 void IaBomber::setNewGoal(double x, double z)
 {
 	OgreFramework::getSingletonPtr()->m_pLog->logMessage("Finding New Goal...");
-	//if (isADangerousZone(x, z))
-	//{
-		setNewDefensiveGoal(x, z);
-	/*}
-	else
+	int a = x / 3.2 - .02;
+	int b = z / 3.2 - .02;
+	if (AppFactory::getSingletonPtr()->mapDanger[b][a] == 0)
 	{
-		setNewOffensiveGoal(x, z);
-	}*/
+		int dir = rand() % 4;
+		if (dir == 1 && AppFactory::getSingletonPtr()->mapDanger[b][a + 1] == 0 && AppFactory::getSingletonPtr()->mapCollision[b][a + 1] == 0)
+		{
+			xGoal += 3.18;
+		}
+		if (dir == 2 && AppFactory::getSingletonPtr()->mapDanger[b + 1][a] == 0 && AppFactory::getSingletonPtr()->mapCollision[b + 1][a] == 0)
+		{
+			zGoal += 3.18;
+		}
+		if (dir == 3 && AppFactory::getSingletonPtr()->mapDanger[b][a - 1] == 0 && AppFactory::getSingletonPtr()->mapCollision[b][a - 1] == 0)
+		{
+			xGoal -= 3.18;
+		}
+		if (dir == 4 && AppFactory::getSingletonPtr()->mapDanger[b - 1][a] == 0 && AppFactory::getSingletonPtr()->mapCollision[b - 1][a] == 0)
+		{
+			zGoal -= 3.18;
+		}
+		return;
+	}
+	setNewDefensiveGoal(x, z);
 }
 
 bool IaBomber::isADangerousZone(double x, double z)
